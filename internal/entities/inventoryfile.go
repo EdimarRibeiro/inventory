@@ -2,16 +2,15 @@ package entities
 
 import (
 	"errors"
-
-	"gorm.io/gorm"
 )
 
 type InventoryFile struct {
-	gorm.Model
-	Id          float64 `gorm:"primaryKey"`
-	InventoryId float64
-	Inventory   Inventory `gorm:"constraint:OnUpdate:NULL,OnDelete:SET NULL;"`
+	Id          uint64 `gorm:"primaryKey"`
+	InventoryId uint64
+	Inventory   Inventory `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;"`
 	FileName    string    `gorm:"size:500"`
+	FileType    string    `gorm:"size:3"`
+	Processed   bool
 }
 
 func (c *InventoryFile) Validate() error {
@@ -26,11 +25,13 @@ func (c *InventoryFile) Validate() error {
 	return nil
 }
 
-func NewInventoryFile(id float64, inventoryId float64, fileName string) (*InventoryFile, error) {
+func NewInventoryFile(id uint64, inventoryId uint64, fileName string, fileType string) (*InventoryFile, error) {
 	model := InventoryFile{
 		Id:          id,
 		InventoryId: inventoryId,
 		FileName:    fileName,
+		FileType:    fileType,
+		Processed:   false,
 	}
 	return NewInventoryFileEntity(model)
 }
@@ -41,4 +42,9 @@ func NewInventoryFileEntity(entity InventoryFile) (*InventoryFile, error) {
 		return nil, err
 	}
 	return &entity, nil
+}
+
+func (i *InventoryFile) SetProcessed() error {
+	i.Processed = true
+	return nil
 }

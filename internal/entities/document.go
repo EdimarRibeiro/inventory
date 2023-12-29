@@ -5,17 +5,15 @@ import (
 	"time"
 
 	"github.com/EdimarRibeiro/inventory/internal/utils"
-	"gorm.io/gorm"
 )
 
 /*C100*/
 type Document struct {
-	gorm.Model
-	Id            float64   `gorm:"primaryKey;autoIncrement:true"`
-	InventoryId   float64   `gorm:"index:idx_Inventory"`
-	Inventory     Inventory `gorm:"constraint:OnUpdate:NULL,OnDelete:SET NULL;"`
-	ParticipantId float64
-	Participant   Participant `gorm:"constraint:OnUpdate:NULL,OnDelete:SET NULL;"`
+	Id            uint64    `gorm:"primaryKey;autoIncrement:true"`
+	InventoryId   uint64    `gorm:"index:idx_Inventory"`
+	Inventory     Inventory `gorm:"constraint:OnUpdate:SET NULL,OnDelete:SET NULL;"`
+	ParticipantId uint64
+	Participant   Participant `gorm:"constraint:OnUpdate:SET NULL,OnDelete:SET NULL;"`
 	OperationId   string      `gorm:"size:1"`
 	EmitentTypeId string      `gorm:"size:1"`
 	ModelId       string      `gorm:"size:2"`
@@ -23,26 +21,27 @@ type Document struct {
 	Serie         string      `gorm:"size:3"`
 	Number        string      `gorm:"size:9"`
 	DocumentKey   string      `gorm:"size:44"`
-	EmitentDate   time.Time
-	ExitDate      time.Time
-	DocumentValue float64
-	PayTypeId     string `gorm:"size:1"`
-	Discount      float64
-	Reduction     float64
-	ProductValue  float64
-	FreightType   string `gorm:"size:1"`
-	FreightValue  float64
-	SafeValue     float64
-	ExpenseValue  float64
-	BaseIcms      float64
-	ValueIcms     float64
-	BaseIcmsSt    float64
-	ValueIcmsSt   float64
-	ValueIpi      float64
-	ValuePis      float64
-	ValueCofins   float64
-	ValuePisSt    float64
-	ValueCofinsSt float64
+	EmitentDate   time.Time   `gorm:"datetime"`
+	ExitDate      time.Time   `gorm:"datetime"`
+	DocumentValue float64     `gorm:"type:decimal (18,2)"`
+	PayTypeId     string      `gorm:"size:1"`
+	Discount      float64     `gorm:"type:decimal (12,2)"`
+	Reduction     float64     `gorm:"type:decimal (12,2)"`
+	ProductValue  float64     `gorm:"type:decimal (18,2)"`
+	FreightType   string      `gorm:"size:1"`
+	FreightValue  float64     `gorm:"type:decimal (12,2)"`
+	SafeValue     float64     `gorm:"type:decimal (12,2)"`
+	ExpenseValue  float64     `gorm:"type:decimal (12,2)"`
+	BaseIcms      float64     `gorm:"type:decimal (18,2)"`
+	ValueIcms     float64     `gorm:"type:decimal (18,2)"`
+	BaseIcmsSt    float64     `gorm:"type:decimal (18,2)"`
+	ValueIcmsSt   float64     `gorm:"type:decimal (18,2)"`
+	ValueIpi      float64     `gorm:"type:decimal (18,2)"`
+	ValuePis      float64     `gorm:"type:decimal (18,2)"`
+	ValueCofins   float64     `gorm:"type:decimal (18,2)"`
+	ValuePisSt    float64     `gorm:"type:decimal (18,2)"`
+	ValueCofinsSt float64     `gorm:"type:decimal (18,2)"`
+	Origined      string      `gorm:"size:3"`
 	Processed     bool
 	Imported      bool
 	Cloused       bool
@@ -70,21 +69,19 @@ func (c *Document) SetCloused() error {
 	return nil
 }
 
-func CreateDocument(InventoryId float64, line string) (*Document, error) {
+func CreateDocument(inventoryId uint64, participantId uint64, line string) (*Document, error) {
 	var err error = nil
 	document := Document{}
 
 	document.Id, err = 0, nil
-	document.InventoryId, err = InventoryId, nil
+	document.InventoryId, err = inventoryId, nil
+	document.ParticipantId, err = participantId, nil
+
 	document.OperationId, err = utils.CopyText(line, 2)
 	if err != nil {
 		return nil, err
 	}
 	document.EmitentTypeId, err = utils.CopyText(line, 3)
-	if err != nil {
-		return nil, err
-	}
-	document.ParticipantId, err = GetParticipantId(utils.CopyText(line, 4))
 	if err != nil {
 		return nil, err
 	}
@@ -188,13 +185,14 @@ func CreateDocument(InventoryId float64, line string) (*Document, error) {
 	if err != nil {
 		return nil, err
 	}
+	document.Origined, err = "txt", nil
 	document.Processed, err = true, nil
 	document.Imported, err = false, nil
 	document.Cloused, err = false, nil
 	return NewDocumentEntity(document)
 }
 
-func NewDocument(inventoryId float64, participantId float64, operationId string, emitentTypeId string, modelId string, statusId string, serie string, number string, documentKey string, emitentDate time.Time, exitDate time.Time, documentValue float64, payTypeId string, discount float64, reduction float64, productValue float64, freightType string, freightValue float64, safeValue float64, expenseValue float64, baseIcms float64, valueIcms float64, baseIcmsSt float64, valueIcmsSt float64, valueIpi float64, valuePis float64, valueCofins float64, valuePisSt float64, valueCofinsSt float64, imported bool) (*Document, error) {
+func NewDocument(inventoryId uint64, participantId uint64, operationId string, emitentTypeId string, modelId string, statusId string, serie string, number string, documentKey string, emitentDate time.Time, exitDate time.Time, documentValue float64, payTypeId string, discount float64, reduction float64, productValue float64, freightType string, freightValue float64, safeValue float64, expenseValue float64, baseIcms float64, valueIcms float64, baseIcmsSt float64, valueIcmsSt float64, valueIpi float64, valuePis float64, valueCofins float64, valuePisSt float64, valueCofinsSt float64, imported bool, origined string) (*Document, error) {
 	model := Document{
 		Id:            0,
 		InventoryId:   inventoryId,
@@ -227,6 +225,7 @@ func NewDocument(inventoryId float64, participantId float64, operationId string,
 		ValuePisSt:    valuePisSt,
 		ValueCofinsSt: valueCofinsSt,
 		Imported:      imported,
+		Origined:      origined,
 	}
 	return NewDocumentEntity(model)
 }

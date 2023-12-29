@@ -4,49 +4,31 @@ import (
 	"errors"
 
 	"github.com/EdimarRibeiro/inventory/internal/utils"
-	"gorm.io/gorm"
 )
 
 /*0200*/
 type Product struct {
-	gorm.Model
-	Id            float64 `gorm:"primaryKey;autoIncrement:true"`
-	TenantId      float64
-	Tenant        Tenant `gorm:"constraint:OnUpdate:NULL,OnDelete:SET NULL;"`
-	OriginCode    string `gorm:"size:60"`
-	Description   string `gorm:"size:250"`
-	BarCode       string `gorm:"size:60"`
-	OldOriginCode string `gorm:"size:60"`
-	UnitId        string `gorm:"size:6"`
-	Unit          Unit   `gorm:"constraint:OnUpdate:NULL,OnDelete:SET NULL;"`
-	Type          string `gorm:"size:2"`
-	NcmCode       string `gorm:"size:8"`
-	ExIpi         string `gorm:"size:3"`
-	GenderCode    string `gorm:"size:2"`
-	ServiceCode   string `gorm:"size:5"`
-	AliqIcms      float64
-	CestCode      string `gorm:"size:7"`
-}
-
-func GetProductId(value string, err error) (float64, error) {
-	if err != nil {
-		return 0, err
-	}
-
-	return 10, nil
-}
-
-func GetProductIdBarCode(value string, err error) (float64, error) {
-	if err != nil {
-		return 0, err
-	}
-
-	return 10, nil
+	Id            uint64 `gorm:"primaryKey;autoIncrement:true"`
+	TenantId      uint64
+	Tenant        Tenant  `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;"`
+	OriginCode    string  `gorm:"size:60"`
+	Description   string  `gorm:"size:250"`
+	BarCode       string  `gorm:"size:60"`
+	OldOriginCode string  `gorm:"size:60"`
+	UnitId        string  `gorm:"size:6"`
+	Unit          Unit    `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;"`
+	Type          string  `gorm:"size:2"`
+	NcmCode       string  `gorm:"size:8"`
+	ExIpi         string  `gorm:"size:3"`
+	GenderCode    string  `gorm:"size:2"`
+	ServiceCode   string  `gorm:"size:5"`
+	AliqIcms      float64 `gorm:"type:decimal (8,2)"`
+	CestCode      string  `gorm:"size:7"`
 }
 
 func (c *Product) Validate() error {
 	if c.OriginCode == "" {
-		return errors.New("the originCode is required")
+		return errors.New("the product originCode is required")
 	}
 
 	if c.Description == "" {
@@ -77,7 +59,7 @@ func (c *Product) Validate() error {
 		return errors.New("the value ncmCode is inválid")
 	}
 
-	if c.GenderCode == "" {
+	if c.GenderCode != "" && len(c.GenderCode) != 2 {
 		return errors.New("the genderCode is required")
 	}
 
@@ -87,7 +69,7 @@ func (c *Product) Validate() error {
 	return nil
 }
 
-func NewProduct(tenantId float64, description string, barCode string, oldOriginCode string, unitId string, Type string, ncmCode string, exIpi string, genderCode string, serviceCode string, aliqIcms float64, cestCode string, originCode string) (*Product, error) {
+func NewProduct(tenantId uint64, description string, barCode string, oldOriginCode string, unitId string, Type string, ncmCode string, exIpi string, genderCode string, serviceCode string, aliqIcms float64, cestCode string, originCode string) (*Product, error) {
 	model := Product{
 		Id:            0,
 		TenantId:      tenantId,
@@ -106,7 +88,7 @@ func NewProduct(tenantId float64, description string, barCode string, oldOriginC
 	}
 	return NewProductEntity(model)
 }
-func CreateProduct(tenantId float64, line string) (*Product, error) {
+func CreateProduct(tenantId uint64, line string) (*Product, error) {
 	var err error = nil
 	product := Product{}
 

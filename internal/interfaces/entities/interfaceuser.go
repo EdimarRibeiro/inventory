@@ -5,6 +5,6 @@ import (
 )
 
 type UserRepositoryInterface interface {
-	Save(model *entities.User) (entities.User, error)
-	Search(where string) []entities.User
+	Save(model *entities.User) (*entities.User, error)
+	Search(where string) ([]entities.User, error)
 }

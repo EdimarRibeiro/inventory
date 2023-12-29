@@ -3,18 +3,15 @@ package entities
 import (
 	"errors"
 	"time"
-
-	"gorm.io/gorm"
 )
 
 type Tenant struct {
-	gorm.Model
-	Id        float64 `gorm:"primaryKey;autoIncrement:true"`
-	Name      string  `gorm:"size:150"`
-	Document  string  `gorm:"size:14"`
-	PersonId  float64
-	StartDate time.Time
-	EndDate   time.Time
+	Id        uint64    `gorm:"primaryKey;autoIncrement:true"`
+	Name      string    `gorm:"size:150"`
+	Document  string    `gorm:"size:14"`
+	StartDate time.Time `gorm:"datetime"`
+	PersonId  uint64    `gorm:"default:null"`
+	Canceled  bool
 }
 
 func (c *Tenant) Validate() error {
@@ -24,19 +21,19 @@ func (c *Tenant) Validate() error {
 	if c.Document == "" {
 		return errors.New("the document is required")
 	}
-	if c.PersonId == 0 {
-		return errors.New("the personId is inválid")
-	}
 	return nil
 }
 
-func NewTenant(name string, document string, personId float64) (*Tenant, error) {
+func NewTenant(name string, document string, personId uint64) (*Tenant, error) {
 	model := Tenant{
-		Id:        0,
 		Name:      name,
 		Document:  document,
-		PersonId:  personId,
 		StartDate: time.Now(),
+		Canceled:  false,
+	}
+
+	if personId > 0 {
+		model.PersonId = personId
 	}
 	return NewTenantEntity(model)
 }
@@ -46,5 +43,15 @@ func NewTenantEntity(entity Tenant) (*Tenant, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &entity, nil
+	//Null foreign key treatment
+	resp := Tenant{
+		Name:      entity.Name,
+		Document:  entity.Document,
+		StartDate: entity.StartDate,
+		Canceled:  entity.Canceled,
+	}
+	if entity.PersonId > 0 {
+		resp.PersonId = entity.PersonId
+	}
+	return &resp, nil
 }

@@ -3,18 +3,15 @@ package entities
 import (
 	"errors"
 	"time"
-
-	"gorm.io/gorm"
 )
 
 type Inventory struct {
-	gorm.Model
-	Id        float64 `gorm:"primaryKey"`
-	TenantId  float64
-	Tenant    Tenant `gorm:"constraint:OnUpdate:NULL,OnDelete:SET NULL;"`
-	Name      string `gorm:"size:150"`
-	StartDate time.Time
-	EndDate   time.Time
+	Id        uint64 `gorm:"primaryKey"`
+	TenantId  uint64
+	Tenant    Tenant    `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;"`
+	Name      string    `gorm:"size:150"`
+	StartDate time.Time `gorm:"datetime"`
+	EndDate   time.Time `gorm:"datetime"`
 	Processed bool
 	Cloused   bool
 }
@@ -34,7 +31,7 @@ func (c *Inventory) SetProcessed() error {
 	return nil
 }
 
-func NewInventory(tenantId float64, name string, document string) (*Inventory, error) {
+func NewInventory(tenantId uint64, name string) (*Inventory, error) {
 	model := Inventory{
 		Id:        0,
 		Name:      name,

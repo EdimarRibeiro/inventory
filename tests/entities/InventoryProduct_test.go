@@ -16,7 +16,7 @@ func TestValidInventoryProductCreate(t *testing.T) {
 }
 
 func TestValidCreateInventoryProduct(t *testing.T) {
-	model, err := entities.CreateInventoryProduct(10, time.Now(), "|H010|100|UN|15,001|0,006015|7,01|0|111||||||")
+	model, err := entities.CreateInventoryProduct(10, 10, 10, time.Now(), "|H010|100|UN|15,001|0,006015|7,01|0|111||||||")
 	assert.NoError(t, err, nil)
 
 	if model.InventoryId != 10 {
@@ -40,7 +40,7 @@ func TestValidCreateInventoryProduct(t *testing.T) {
 	if model.PossessionCode != "0" {
 		assert.NoError(t, errors.New("invalid value field PossessionCode"))
 	}
-	if model.ParticipantId != 0 {
+	if *model.ParticipantId != 10 {
 		assert.NoError(t, errors.New("invalid value field ParticipantId"))
 	}
 	if model.Complement != "" {

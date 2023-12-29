@@ -16,13 +16,13 @@ func TestValidDocumentCreate(t *testing.T) {
 }
 
 func TestValidDocumentNew(t *testing.T) {
-	model, err := entities.NewDocument(10, 0, "", "", "", "", "", "", "", time.Now(), time.Now(), 0, "", 0, 0, 0, "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, false)
+	model, err := entities.NewDocument(10, 0, "", "", "", "", "", "", "", time.Now(), time.Now(), 0, "", 0, 0, 0, "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, false, "xml")
 	assert.NoError(t, err, nil)
 	model.Validate()
 }
 
 func TestValidCreateDocument(t *testing.T) {
-	model, err := entities.CreateDocument(10, "|C100|0|1|222108|55|00|010|473710|32221200074569001840550100004737101450070258|29122022|02012023|1682,23|1|0||1682,23|9|0|0|10,03|0,00|0,00|0,00|0,00|0,00|25,78|118,60|00|00|")
+	model, err := entities.CreateDocument(10, 10, "|C100|0|1|222108|55|00|010|473710|32221200074569001840550100004737101450070258|29122022|02012023|1682,23|1|0||1682,23|9|0|0|10,03|0,00|0,00|0,00|0,00|0,00|25,78|118,60|00|00|")
 	assert.NoError(t, err, nil)
 	if model.Id != 0 {
 		assert.NoError(t, errors.New("invalid value field Id"))
@@ -30,7 +30,7 @@ func TestValidCreateDocument(t *testing.T) {
 	if model.InventoryId != 10 {
 		assert.NoError(t, errors.New("invalid value field InventoryId"))
 	}
-	if model.ParticipantId != 0 {
+	if model.ParticipantId != 10 {
 		assert.NoError(t, errors.New("invalid value field ParticipantId"))
 	}
 	if model.OperationId != "0" {
@@ -126,6 +126,9 @@ func TestValidCreateDocument(t *testing.T) {
 	}
 	if model.Imported != false {
 		assert.NoError(t, errors.New("invalid value field Imported"))
+	}
+	if model.Origined == "" {
+		assert.NoError(t, errors.New("invalid value field Origined"))
 	}
 }
 

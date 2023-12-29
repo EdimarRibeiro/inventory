@@ -9,14 +9,18 @@ type DocumentRepository struct {
 	DB *gorm.DB
 }
 
-func (entity *DocumentRepository) Save(model *entities.Document) (entities.Document, error) {
-	result := entity.DB.Save(model)
-	return *model, result.Error
+func CreateDocumentRepository(db *gorm.DB) *DocumentRepository {
+	return &DocumentRepository{DB: db}
 }
 
-func (entity *DocumentRepository) Search(value string, err error) ([]entities.Document, error) {
+func (entity *DocumentRepository) Save(model *entities.Document) (*entities.Document, error) {
+	result := entity.DB.Save(&model)
+	return model, result.Error
+}
+
+func (entity *DocumentRepository) Search(where string) ([]entities.Document, error) {
 	var model []entities.Document
-	result := entity.DB.Where(&model, "DocumentCode = ?", value)
+	result := entity.DB.Where(where).Find(&model)
 	if result.Error != nil {
 		return nil, result.Error
 	}

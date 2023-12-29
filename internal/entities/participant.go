@@ -4,24 +4,20 @@ import (
 	"errors"
 
 	"github.com/EdimarRibeiro/inventory/internal/utils"
-	"gorm.io/gorm"
 )
 
 /*0150*/
 type Participant struct {
-	gorm.Model
-	Id           float64 `gorm:"primaryKey;autoIncrement:true"`
-	TenantId     float64
-	Tenant       Tenant `gorm:"constraint:OnUpdate:NULL,OnDelete:SET NULL;"`
+	Id           uint64 `gorm:"primaryKey;autoIncrement:true"`
+	TenantId     uint64
+	Tenant       Tenant `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;"`
 	OriginCode   string `gorm:"size:60"`
 	Name         string `gorm:"size:100"`
 	Document     string `gorm:"size:14"`
 	DocumentCpf  string `gorm:"size:11"`
 	Registration string `gorm:"size:14"`
-	CountryId    float64
-	Country      Country `gorm:"constraint:OnUpdate:NULL,OnDelete:SET NULL;"`
-	CityId       float64
-	City         City   `gorm:"constraint:OnUpdate:NULL,OnDelete:SET NULL;"`
+	CountryCode  string `gorm:"size:5"`
+	CityCode     string `gorm:"size:7"`
 	Suframa      string `gorm:"size:9"`
 	Street       string `gorm:"size:200"`
 	Number       string `gorm:"size:10"`
@@ -31,7 +27,7 @@ type Participant struct {
 
 func (c *Participant) Validate() error {
 	if c.OriginCode == "" {
-		return errors.New("the originCode is required")
+		return errors.New("the participant originCode is required")
 	}
 	if c.Name == "" {
 		return errors.New("the name is required")
@@ -40,33 +36,34 @@ func (c *Participant) Validate() error {
 		return errors.New("the document or documentCpf is required")
 	}
 	if c.Document != "" && len(c.Document) != 14 {
-		return errors.New("the document is inválid")
+		return errors.New("the document is invalid")
 	}
 	if c.DocumentCpf != "" && len(c.DocumentCpf) != 11 {
-		return errors.New("the documentCpf is inválid")
+		return errors.New("the documentCpf is invalid")
 	}
 	if c.TenantId == 0 {
-		return errors.New("the tenantId is inválid")
+		return errors.New("the tenantId is invalid")
 	}
-	if c.CountryId == 0 {
-		return errors.New("the countryId is inválid")
+	if c.CountryCode == "" {
+		return errors.New("the countryCode is invalid")
 	}
-	if c.CityId == 0 {
-		return errors.New("the cityId is inválid")
+	if c.CityCode == "" {
+		return errors.New("the cityCode is invalid")
 	}
 	return nil
 }
 
-func NewParticipant(tenantId float64, originCode string, name string, document string, registration string, countryId float64, cityId float64, street string, number string, complement string, neighborhood string) (*Participant, error) {
+func NewParticipant(tenantId uint64, originCode string, name string, document string, documentCpf string, registration string, countryCode string, cityCode string, street string, number string, complement string, neighborhood string) (*Participant, error) {
 	model := Participant{
 		Id:           0,
 		OriginCode:   originCode,
 		TenantId:     tenantId,
 		Name:         name,
 		Document:     document,
+		DocumentCpf:  documentCpf,
 		Registration: registration,
-		CountryId:    countryId,
-		CityId:       cityId,
+		CountryCode:  countryCode,
+		CityCode:     cityCode,
 		Street:       street,
 		Number:       number,
 		Neighborhood: neighborhood,
@@ -75,7 +72,7 @@ func NewParticipant(tenantId float64, originCode string, name string, document s
 	return NewParticipantEntity(model)
 }
 
-func CreateParticipant(tenantId float64, line string) (*Participant, error) {
+func CreateParticipant(tenantId uint64, line string) (*Participant, error) {
 	var err error = nil
 	participant := Participant{}
 	participant.Id, err = 0, nil
@@ -88,7 +85,7 @@ func CreateParticipant(tenantId float64, line string) (*Participant, error) {
 	if err != nil {
 		return nil, err
 	}
-	participant.CountryId, err = GetCountryId(utils.CopyText(line, 4))
+	participant.CountryCode, err = utils.CopyText(line, 4)
 	if err != nil {
 		return nil, err
 	}
@@ -104,7 +101,7 @@ func CreateParticipant(tenantId float64, line string) (*Participant, error) {
 	if err != nil {
 		return nil, err
 	}
-	participant.CityId, err = GetCityId(utils.CopyText(line, 8))
+	participant.CityCode, err = utils.CopyText(line, 8)
 	if err != nil {
 		return nil, err
 	}
@@ -128,7 +125,6 @@ func CreateParticipant(tenantId float64, line string) (*Participant, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	return NewParticipantEntity(participant)
 }
 
@@ -138,12 +134,4 @@ func NewParticipantEntity(entity Participant) (*Participant, error) {
 		return nil, err
 	}
 	return &entity, nil
-}
-
-func GetParticipantId(value string, err error) (float64, error) {
-	if err != nil {
-		return 0, err
-	}
-
-	return 0, nil
 }

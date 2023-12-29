@@ -5,6 +5,6 @@ import (
 )
 
 type DocumentRepositoryInterface interface {
-	Save(model *entities.Document) (entities.Document, error)
-	Search(where string) []entities.Document
+	Save(model *entities.Document) (*entities.Document, error)
+	Search(where string) ([]entities.Document, error)
 }

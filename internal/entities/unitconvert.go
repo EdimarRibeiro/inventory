@@ -4,20 +4,18 @@ import (
 	"errors"
 
 	"github.com/EdimarRibeiro/inventory/internal/utils"
-	"gorm.io/gorm"
 )
 
 /*0220*/
 type UnitConvert struct {
-	gorm.Model
 	UnitId           string  `gorm:"primaryKey;size:6"`
-	Unit             Unit    `gorm:"constraint:OnUpdate:NULL,OnDelete:SET NULL;"`
-	ProductId        float64 `gorm:"primaryKey"`
-	Product          Product `gorm:"constraint:OnUpdate:NULL,OnDelete:SET NULL;"`
-	TenantId         float64 `gorm:"primaryKey"`
-	Tenant           Tenant  `gorm:"constraint:OnUpdate:NULL,OnDelete:SET NULL;"`
-	ConversionFactor float64
-	BarCode          string `gorm:"primaryKey;size:60"`
+	Unit             Unit    `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;"`
+	ProductId        uint64  `gorm:"primaryKey"`
+	Product          Product `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;"`
+	TenantId         uint64  `gorm:"primaryKey"`
+	Tenant           Tenant  `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;"`
+	ConversionFactor float64 `gorm:"type:decimal (18,6)"`
+	BarCode          string  `gorm:"primaryKey;size:60"`
 }
 
 func (c *UnitConvert) Validate() error {
@@ -51,7 +49,7 @@ func (c *UnitConvert) Validate() error {
 	return nil
 }
 
-func NewUnitConvert(unitId string, productId float64, tenantId float64, conversionFactor float64, barCode string) (*UnitConvert, error) {
+func NewUnitConvert(unitId string, productId uint64, tenantId uint64, conversionFactor float64, barCode string) (*UnitConvert, error) {
 	model := UnitConvert{
 		UnitId:           unitId,
 		ProductId:        productId,
@@ -62,7 +60,7 @@ func NewUnitConvert(unitId string, productId float64, tenantId float64, conversi
 	return NewUnitConvertEntity(model)
 }
 
-func CreateUnitConvert(tenantId float64, line string) (*UnitConvert, error) {
+func CreateUnitConvert(tenantId uint64, productId uint64, line string) (*UnitConvert, error) {
 	var err error = nil
 	model := UnitConvert{}
 	model.UnitId, err = utils.CopyText(line, 2)
@@ -73,7 +71,7 @@ func CreateUnitConvert(tenantId float64, line string) (*UnitConvert, error) {
 	if err != nil {
 		return nil, err
 	}
-	model.ProductId, err = GetProductIdBarCode(utils.CopyText(line, 4))
+	model.ProductId, err = productId, nil
 	if err != nil {
 		return nil, err
 	}

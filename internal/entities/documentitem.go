@@ -4,55 +4,53 @@ import (
 	"errors"
 
 	"github.com/EdimarRibeiro/inventory/internal/utils"
-	"gorm.io/gorm"
 )
 
 /*C170*/
 type DocumentItem struct {
-	gorm.Model
-	DocumentId         float64  `gorm:"primaryKey"`
-	Document           Document `gorm:"constraint:OnUpdate:NULL,OnDelete:SET NULL;"`
+	DocumentId         uint64   `gorm:"primaryKey"`
+	Document           Document `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;"`
 	Sequency           string   `gorm:"primaryKey;size:3"`
-	InventoryId        float64
-	Inventory          Inventory `gorm:"constraint:OnUpdate:NULL,OnDelete:SET NULL;"`
-	ProductId          float64
-	Product            Product `gorm:"constraint:OnUpdate:NULL,OnDelete:SET NULL;"`
+	InventoryId        uint64
+	Inventory          Inventory `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;"`
+	ProductId          uint64
+	Product            Product `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;"`
 	Complememt         string  `gorm:"size:255"`
-	Quantity           float64
-	UnitId             string `gorm:"size:6"`
-	Unit               Unit   `gorm:"constraint:OnUpdate:NULL,OnDelete:SET NULL;"`
-	Value              float64
-	Discount           float64
-	MovimentType       string `gorm:"size:1"`
-	CstCode            string `gorm:"size:3"`
-	CfopCode           string `gorm:"size:4"`
-	OperationNatureId  string `gorm:"size:10"`
-	BaseIcms           float64
-	AliquotIcms        float64
-	ValueIcms          float64
-	BaseIcmsSt         float64
-	ValueIcmsSt        float64
-	AliquotIcmsSt      float64
-	ApurationIpiCode   string `gorm:"size:1"`
-	CstIpiCode         string `gorm:"size:2"`
-	LegalIpiCode       string `gorm:"size:3"`
-	BaseIpi            float64
-	AliquotIpi         float64
-	ValueIpi           float64
-	CstPisCode         string `gorm:"size:2"`
-	BasePis            float64
-	AliquotPis         float64
-	QuantityBasePis    float64
-	ValueAliquotPis    float64
-	ValuePis           float64
-	CstCofinsCode      string `gorm:"size:2"`
-	BaseCofins         float64
-	AliquotCofins      float64
-	QuantityBaseCofins float64
-	ValueAliquotCofins float64
-	ValueCofins        float64
+	Quantity           float64 `gorm:"type:decimal (18,5)"`
+	UnitId             string  `gorm:"size:6"`
+	Unit               Unit    `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;"`
+	Value              float64 `gorm:"type:decimal (18,2)"`
+	Discount           float64 `gorm:"type:decimal (12,2)"`
+	MovimentType       string  `gorm:"size:1"`
+	CstCode            string  `gorm:"size:3"`
+	CfopCode           string  `gorm:"size:4"`
+	OperationNatureId  string  `gorm:"size:10"`
+	BaseIcms           float64 `gorm:"type:decimal (18,2)"`
+	AliquotIcms        float64 `gorm:"type:decimal (12,2)"`
+	ValueIcms          float64 `gorm:"type:decimal (18,2)"`
+	BaseIcmsSt         float64 `gorm:"type:decimal (18,2)"`
+	ValueIcmsSt        float64 `gorm:"type:decimal (12,2)"`
+	AliquotIcmsSt      float64 `gorm:"type:decimal (12,2)"`
+	ApurationIpiCode   string  `gorm:"size:1"`
+	CstIpiCode         string  `gorm:"size:2"`
+	LegalIpiCode       string  `gorm:"size:3"`
+	BaseIpi            float64 `gorm:"type:decimal (18,2)"`
+	AliquotIpi         float64 `gorm:"type:decimal (12,2)"`
+	ValueIpi           float64 `gorm:"type:decimal (12,2)"`
+	CstPisCode         string  `gorm:"size:2"`
+	BasePis            float64 `gorm:"type:decimal (18,2)"`
+	AliquotPis         float64 `gorm:"type:decimal (12,4)"`
+	QuantityBasePis    float64 `gorm:"type:decimal (12,3)"`
+	ValueAliquotPis    float64 `gorm:"type:decimal (12,4)"`
+	ValuePis           float64 `gorm:"type:decimal (12,2)"`
+	CstCofinsCode      string  `gorm:"size:2"`
+	BaseCofins         float64 `gorm:"type:decimal (18,2)"`
+	AliquotCofins      float64 `gorm:"type:decimal (12,4)"`
+	QuantityBaseCofins float64 `gorm:"type:decimal (12,3)"`
+	ValueAliquotCofins float64 `gorm:"type:decimal (12,4)"`
+	ValueCofins        float64 `gorm:"type:decimal (12,2)"`
 	AccountingCode     string
-	RebateValue        float64
+	RebateValue        float64 `gorm:"type:decimal (12,2)"`
 }
 
 func (c *DocumentItem) Validate() error {
@@ -60,18 +58,18 @@ func (c *DocumentItem) Validate() error {
 		return errors.New("the sequency is required")
 	}
 	if c.DocumentId == 0 {
-		return errors.New("the documentId is inválid")
+		return errors.New("the documentId is invalid")
 	}
 	if c.InventoryId == 0 {
-		return errors.New("the inventoryId is inválid")
+		return errors.New("the inventoryId is invalid")
 	}
 	if c.ProductId == 0 {
-		return errors.New("the productId is inválid")
+		return errors.New("the productId is invalid")
 	}
 	return nil
 }
 
-func NewDocumentItem(documentId float64, inventoryId float64, sequency string, productId float64, complememt string, quantity float64, unitId string, value float64, discount float64, movimentType string, cstCode string, cfopCode string, operationNatureId string, baseIcms float64, aliquotIcms float64, valueIcms float64, baseIcmsSt float64, valueIcmsSt float64, aliquotIcmsSt float64, apurationIpiCode string, cstIpiCode string, legalIpiCode string, baseIpi float64, aliquotIpi float64, valueIpi float64, cstPisCode string, basePis float64, aliquotPis float64, quantityBasePis float64, valueAliquotPis float64, valuePis float64, cstCofinsCode string, baseCofins float64, aliquotCofins float64, quantityBaseCofins float64, valueAliquotCofins float64, valueCofins float64, accountingCode string, rebateValue float64) (*DocumentItem, error) {
+func NewDocumentItem(documentId uint64, inventoryId uint64, sequency string, productId uint64, complememt string, quantity float64, unitId string, value float64, discount float64, movimentType string, cstCode string, cfopCode string, operationNatureId string, baseIcms float64, aliquotIcms float64, valueIcms float64, baseIcmsSt float64, valueIcmsSt float64, aliquotIcmsSt float64, apurationIpiCode string, cstIpiCode string, legalIpiCode string, baseIpi float64, aliquotIpi float64, valueIpi float64, cstPisCode string, basePis float64, aliquotPis float64, quantityBasePis float64, valueAliquotPis float64, valuePis float64, cstCofinsCode string, baseCofins float64, aliquotCofins float64, quantityBaseCofins float64, valueAliquotCofins float64, valueCofins float64, accountingCode string, rebateValue float64) (*DocumentItem, error) {
 	model := &DocumentItem{
 		DocumentId:         documentId,
 		InventoryId:        inventoryId,
@@ -129,19 +127,17 @@ func NewDocumentItemEntity(entity DocumentItem) (*DocumentItem, error) {
 	return &entity, nil
 }
 
-func CreateDocumentItem(DocumentId float64, InventoryId float64, line string) (*DocumentItem, error) {
+func CreateDocumentItem(documentId uint64, inventoryId uint64, productId uint64, line string) (*DocumentItem, error) {
 	var err error = nil
 	documentItem := DocumentItem{}
-	documentItem.DocumentId, err = DocumentId, nil
-	documentItem.InventoryId, err = InventoryId, nil
+	documentItem.DocumentId, err = documentId, nil
+	documentItem.InventoryId, err = inventoryId, nil
+	documentItem.ProductId, err = productId, nil
 	documentItem.Sequency, err = utils.CopyText(line, 2)
 	if err != nil {
 		return nil, err
 	}
-	documentItem.ProductId, err = GetProductId(utils.CopyText(line, 3))
-	if err != nil {
-		return nil, err
-	}
+
 	documentItem.Complememt, err = utils.CopyText(line, 4)
 	if err != nil {
 		return nil, err

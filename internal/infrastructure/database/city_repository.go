@@ -9,12 +9,16 @@ type CityRepository struct {
 	DB *gorm.DB
 }
 
-func (entity *CityRepository) Save(model *entities.City) (entities.City, error) {
-	result := entity.DB.Save(model)
-	return *model, result.Error
+func CreateCityRepository(db *gorm.DB) *CityRepository {
+	return &CityRepository{DB: db}
 }
 
-func (entity *CityRepository) GetCityId(value string, err error) (float64, error) {
+func (entity *CityRepository) Save(model *entities.City) (*entities.City, error) {
+	result := entity.DB.Save(&model)
+	return model, result.Error
+}
+
+func (entity *CityRepository) GetCityId(value string) (uint64, error) {
 	var model entities.City
 	result := entity.DB.First(&model, "CityCode = ?", value)
 	if result.Error != nil {

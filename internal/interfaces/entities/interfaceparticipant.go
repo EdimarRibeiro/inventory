@@ -5,7 +5,7 @@ import (
 )
 
 type ParticipantRepositoryInterface interface {
-	Save(Participant *entities.Participant) (entities.Participant, error)
-	GetParticipantId(value string, err error) (float64, error)
-	Search(where string) []entities.Participant
+	Save(Participant *entities.Participant) (*entities.Participant, error)
+	GetParticipantId(value string, err error) (uint64, error)
+	Search(where string) ([]entities.Participant, error)
 }

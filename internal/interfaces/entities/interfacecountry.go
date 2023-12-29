@@ -5,6 +5,6 @@ import (
 )
 
 type CountryRepositoryInterface interface {
-	Save(model *entities.Country) (entities.Country, error)
-	GetCountryId(value string, err error) (float64, error)
+	Save(model *entities.Country) (*entities.Country, error)
+	GetCountryId(value string) (uint64, error)
 }

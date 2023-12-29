@@ -15,7 +15,7 @@ func TestValidUnitConvertCreate(t *testing.T) {
 }
 
 func TestValidCreateUnitConvert(t *testing.T) {
-	model, err := entities.CreateUnitConvert(10, "|0220|FD|10,003006|7896315125131|")
+	model, err := entities.CreateUnitConvert(10, 10, "|0220|FD|10,003006|7896315125131|")
 	assert.NoError(t, err, nil)
 
 	if model.UnitId != "FD" {

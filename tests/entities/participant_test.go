@@ -10,7 +10,7 @@ import (
 )
 
 func TestValidParticipantCreate(t *testing.T) {
-	model := entities.Participant{Id: 0, OriginCode: "100", TenantId: 10, Name: "Joe", DocumentCpf: "00300600911", CountryId: 10, CityId: 10}
+	model := entities.Participant{Id: 0, OriginCode: "100", TenantId: 10, Name: "Joe", DocumentCpf: "00300600911", CountryCode: "1058", CityCode: "3201506"}
 	assert.NoError(t, model.Validate(), nil)
 }
 
@@ -39,11 +39,11 @@ func TestValidCreateParticipant(t *testing.T) {
 	if model.Registration != "082077860" {
 		assert.NoError(t, errors.New("invalid value field Registration"))
 	}
-	if model.CountryId != 1058 {
-		assert.NoError(t, errors.New("invalid value field CountryId"))
+	if model.CountryCode != "1058" {
+		assert.NoError(t, errors.New("invalid value field CountryCode"))
 	}
-	if model.CityId != 3201506 {
-		assert.NoError(t, errors.New("invalid value field CityId"))
+	if model.CityCode != "3201506" {
+		assert.NoError(t, errors.New("invalid value field CityCode"))
 	}
 	if model.Suframa != "" {
 		assert.NoError(t, errors.New("invalid value field Suframa"))

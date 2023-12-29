@@ -3,20 +3,17 @@ package entities
 import (
 	"errors"
 	"time"
-
-	"gorm.io/gorm"
 )
 
 type User struct {
-	gorm.Model
-	Id        float64 `gorm:"primaryKey;autoIncrement:true"`
-	TenantId  float64
-	Tenant    Tenant `gorm:"constraint:OnUpdate:NULL,OnDelete:SET NULL;"`
-	Name      string `gorm:"size:100"`
-	Login     string `gorm:"size:100;index:idx_Login,unique"`
-	Password  string `gorm:"size:100"`
-	StartDate time.Time
-	EndDate   time.Time
+	Id        uint64     `gorm:"primaryKey;autoIncrement:true" json:"-"`
+	TenantId  uint64     `json:"-"`
+	Tenant    Tenant     `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;" json:"-"`
+	Name      string     `gorm:"size:100"`
+	Login     string     `gorm:"size:100;index:idx_Login,unique"`
+	Password  string     `gorm:"size:100" json:"-"`
+	StartDate time.Time  `gorm:"datetime"`
+	EndDate   *time.Time `gorm:"datetime;default:null"`
 }
 
 func (c *User) Validate() error {
@@ -32,7 +29,7 @@ func (c *User) Validate() error {
 	return nil
 }
 
-func NewUser(tenantId float64, name string, login string, password string) (*User, error) {
+func NewUser(tenantId uint64, name string, login string, password string) (*User, error) {
 	model := User{
 		Id:        0,
 		TenantId:  tenantId,
@@ -40,6 +37,7 @@ func NewUser(tenantId float64, name string, login string, password string) (*Use
 		Login:     login,
 		Password:  password,
 		StartDate: time.Now(),
+		EndDate:   nil,
 	}
 	return NewUserEntity(model)
 }

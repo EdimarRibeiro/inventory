@@ -5,6 +5,6 @@ import (
 )
 
 type InventoryFileRepositoryInterface interface {
-	Save(model *entities.InventoryFile) (entities.InventoryFile, error)
-	Search(where string) []entities.InventoryFile
+	Save(model *entities.InventoryFile) (*entities.InventoryFile, error)
+	Search(where string) ([]entities.InventoryFile, error)
 }

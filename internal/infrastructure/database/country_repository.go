@@ -9,12 +9,16 @@ type CountryRepository struct {
 	DB *gorm.DB
 }
 
-func (entity *CountryRepository) Save(model *entities.Country) (entities.Country, error) {
-	result := entity.DB.Save(model)
-	return *model, result.Error
+func CreateCountryRepository(db *gorm.DB) *CountryRepository {
+	return &CountryRepository{DB: db}
 }
 
-func (entity *CountryRepository) GetCountryId(value string, err error) (float64, error) {
+func (entity *CountryRepository) Save(model *entities.Country) (*entities.Country, error) {
+	result := entity.DB.Save(&model)
+	return model, result.Error
+}
+
+func (entity *CountryRepository) GetCountryId(value string) (uint64, error) {
 	var model entities.Country
 	result := entity.DB.First(&model, "CountryCode = ?", value)
 	if result.Error != nil {

@@ -5,6 +5,6 @@ import (
 )
 
 type TenantRepositoryInterface interface {
-	Save(model *entities.Tenant) (entities.Tenant, error)
-	Search(where string) []entities.Tenant
+	Save(model *entities.Tenant) (*entities.Tenant, error)
+	Search(where string) ([]entities.Tenant, error)
 }

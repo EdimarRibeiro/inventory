@@ -5,31 +5,29 @@ import (
 	"time"
 
 	"github.com/EdimarRibeiro/inventory/internal/utils"
-	"gorm.io/gorm"
 )
 
 /* H005 e H010 */
 type InventoryProduct struct {
-	gorm.Model
-	InventoryId     float64   `gorm:"primaryKey"`
-	Inventory       Inventory `gorm:"constraint:OnUpdate:NULL,OnDelete:SET NULL;"`
-	ProductId       float64   `gorm:"primaryKey"`
-	Product         Product   `gorm:"constraint:OnUpdate:NULL,OnDelete:SET NULL;"`
+	InventoryId     uint64    `gorm:"primaryKey"`
+	Inventory       Inventory `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;"`
+	ProductId       uint64    `gorm:"primaryKey"`
+	Product         Product   `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;"`
 	OriginCode      string    `gorm:"size:60"`
-	Date            time.Time
-	UnitId          string `gorm:"size:6"`
-	Unit            Unit   `gorm:"constraint:OnUpdate:NULL,OnDelete:SET NULL;"`
-	Quantity        float64
-	Value           float64
-	ValueTotal      float64
-	PossessionCode  string `gorm:"size:1"`
-	ParticipantId   float64
-	Complement      string `gorm:"size:250"`
-	AccountingCode  string `gorm:"size:50"`
-	ValueIr         float64
-	InputQuantity   float64
-	OutputQuantity  float64
-	BalanceQuantity float64
+	Date            time.Time `gorm:"datetime"`
+	UnitId          string    `gorm:"size:6"`
+	Unit            Unit      `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;"`
+	Quantity        float64   `gorm:"type:decimal (18,3)"`
+	Value           float64   `gorm:"type:decimal (18,6)"`
+	ValueTotal      float64   `gorm:"type:decimal (18,2)"`
+	PossessionCode  string    `gorm:"size:1"`
+	ParticipantId   *uint64   `gorm:"default:null"`
+	Complement      string    `gorm:"size:250"`
+	AccountingCode  string    `gorm:"size:50"`
+	ValueIr         float64   `gorm:"type:decimal (12,2)"`
+	InputQuantity   float64   `gorm:"type:decimal (18,3)"`
+	OutputQuantity  float64   `gorm:"type:decimal (18,3)"`
+	BalanceQuantity float64   `gorm:"type:decimal (18,3)"`
 }
 
 func (c *InventoryProduct) Validate() error {
@@ -37,7 +35,7 @@ func (c *InventoryProduct) Validate() error {
 		return errors.New("the inventoryId is required")
 	}
 	if c.OriginCode == "" {
-		return errors.New("the originCode is required")
+		return errors.New("the product originCode is required")
 	}
 	if c.ProductId == 0 {
 		return errors.New("the productId is required")
@@ -60,7 +58,7 @@ func (c *InventoryProduct) Validate() error {
 	return nil
 }
 
-func NewInventoryProduct(inventoryId float64, productId float64, originCode string, date time.Time, unitId string, quantity float64, value float64, valueTotal float64, possessionCode string, participantId float64, complement string, accountingCode string, valueIr float64) (*InventoryProduct, error) {
+func NewInventoryProduct(inventoryId uint64, productId uint64, originCode string, date time.Time, unitId string, quantity float64, value float64, valueTotal float64, possessionCode string, participantId uint64, complement string, accountingCode string, valueIr float64) (*InventoryProduct, error) {
 	model := InventoryProduct{
 		InventoryId:    inventoryId,
 		ProductId:      productId,
@@ -71,22 +69,27 @@ func NewInventoryProduct(inventoryId float64, productId float64, originCode stri
 		Value:          value,
 		ValueTotal:     valueTotal,
 		PossessionCode: possessionCode,
-		ParticipantId:  participantId,
 		Complement:     complement,
 		AccountingCode: accountingCode,
 		ValueIr:        valueIr,
+		ParticipantId:  nil,
+	}
+	if participantId > 0 {
+		model.ParticipantId = &participantId
 	}
 	return NewInventoryProductEntity(model)
 }
 
-func CreateInventoryProduct(inventoryId float64, date time.Time, line string) (*InventoryProduct, error) {
+func CreateInventoryProduct(inventoryId uint64, productId uint64, participantId uint64, date time.Time, line string) (*InventoryProduct, error) {
 	var err error = nil
 	inventoryProduct := InventoryProduct{}
 	inventoryProduct.InventoryId, err = inventoryId, nil
-	inventoryProduct.ProductId, err = GetProductId(utils.CopyText(line, 2))
-	if err != nil {
-		return nil, err
+	inventoryProduct.ProductId, err = productId, nil
+	inventoryProduct.ParticipantId = nil
+	if participantId > 0 {
+		inventoryProduct.ParticipantId, err = &participantId, nil
 	}
+
 	inventoryProduct.OriginCode, err = utils.CopyText(line, 2)
 	if err != nil {
 		return nil, err
@@ -112,10 +115,6 @@ func CreateInventoryProduct(inventoryId float64, date time.Time, line string) (*
 		return nil, err
 	}
 	inventoryProduct.PossessionCode, err = utils.CopyText(line, 7)
-	if err != nil {
-		return nil, err
-	}
-	inventoryProduct.ParticipantId, err = GetParticipantId(utils.CopyText(line, 8))
 	if err != nil {
 		return nil, err
 	}
@@ -158,7 +157,7 @@ func (i *InventoryProduct) SetOutputQuantity(quantity float64) error {
 	if quantity < 0 {
 		return errors.New("output quantity is invalid value")
 	}
-	i.InputQuantity = quantity
+	i.OutputQuantity = quantity
 	return nil
 }
 

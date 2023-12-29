@@ -5,6 +5,6 @@ import (
 )
 
 type UnitConvertRepositoryInterface interface {
-	Save(model *entities.UnitConvert) (entities.UnitConvert, error)
-	Search(where string) []entities.UnitConvert
+	Save(model *entities.UnitConvert) (*entities.UnitConvert, error)
+	Search(where string) ([]entities.UnitConvert, error)
 }

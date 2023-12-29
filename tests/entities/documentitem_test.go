@@ -21,7 +21,7 @@ func TestValidDocumentItemNew(t *testing.T) {
 }
 
 func TestValidCreateDocumentItem(t *testing.T) {
-	model, err := entities.CreateDocumentItem(10, 10, "|C170|1|001010||15|FD|801,94|0|0|010|1403|203|0|0|0|0|0|0|0|||0|0|0|50|605,58|1,86|0,00|0,00|11,26|50|605,58|8,54|0,00|0,00|51,72|||")
+	model, err := entities.CreateDocumentItem(10, 10, 10, "|C170|1|001010||15|FD|801,94|0|0|010|1403|203|0|0|0|0|0|0|0|||0|0|0|50|605,58|1,86|0,00|0,00|11,26|50|605,58|8,54|0,00|0,00|51,72|||")
 	assert.NoError(t, err, nil)
 
 	if model.DocumentId != 10 {

@@ -5,7 +5,7 @@ import (
 )
 
 type ProductRepositoryInterface interface {
-	Save(model *entities.Product) (entities.Product, error)
-	GetProductId(value string, err error) (float64, error)
-	Search(where string) []entities.Product
+	Save(model *entities.Product) (*entities.Product, error)
+	GetProductId(value string, err error) (uint64, error)
+	Search(where string) ([]entities.Product, error)
 }

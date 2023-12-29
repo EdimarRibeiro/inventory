@@ -5,6 +5,6 @@ import (
 )
 
 type InventoryProductRepositoryInterface interface {
-	Save(model *entities.InventoryProduct) (entities.InventoryProduct, error)
-	Search(where string) []entities.InventoryProduct
+	Save(model *entities.InventoryProduct) (*entities.InventoryProduct, error)
+	Search(where string) ([]entities.InventoryProduct, error)
 }

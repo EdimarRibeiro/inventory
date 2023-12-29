@@ -6,7 +6,7 @@ import (
 )
 
 type DocumentItemRepositoryInterface interface {
-	Save(model *entities.DocumentItem) (entities.DocumentItem, error)
-	Search(where string) []entities.DocumentItem
-	SumaryQuantity(inventoryId float64) (models.SumaryQuantityModel, error)
+	Save(model *entities.DocumentItem) (*entities.DocumentItem, error)
+	Search(where string) ([]entities.DocumentItem, error)
+	SumaryQuantity(inventoryId uint64) (*[]models.SumaryQuantityModel, error)
 }
