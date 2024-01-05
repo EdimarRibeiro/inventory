@@ -10,13 +10,13 @@ import (
 /* H005 e H010 */
 type InventoryProduct struct {
 	InventoryId     uint64    `gorm:"primaryKey"`
-	Inventory       Inventory `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;"`
+	Inventory       Inventory `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;" json:"-"`
 	ProductId       uint64    `gorm:"primaryKey"`
 	Product         Product   `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;"`
 	OriginCode      string    `gorm:"size:60"`
 	Date            time.Time `gorm:"datetime"`
 	UnitId          string    `gorm:"size:6"`
-	Unit            Unit      `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;"`
+	Unit            Unit      `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;" json:"-"`
 	Quantity        float64   `gorm:"type:decimal (18,3)"`
 	Value           float64   `gorm:"type:decimal (18,6)"`
 	ValueTotal      float64   `gorm:"type:decimal (18,2)"`
@@ -44,16 +44,16 @@ func (c *InventoryProduct) Validate() error {
 		return errors.New("the unitId is required")
 	}
 	if len(c.UnitId) < 2 {
-		return errors.New("the min value unitId is inválid! " + c.UnitId)
+		return errors.New("the min value unitId is invalid! " + c.UnitId)
 	}
 	if len(c.UnitId) > 6 {
-		return errors.New("the max value unitId is inválid! " + c.UnitId)
+		return errors.New("the max value unitId is invalid! " + c.UnitId)
 	}
 	if c.Quantity < 0 {
-		return errors.New("the quantity is inválid")
+		return errors.New("the quantity is invalid")
 	}
 	if c.Value < 0 {
-		return errors.New("the value is inválid")
+		return errors.New("the value is invalid")
 	}
 	return nil
 }

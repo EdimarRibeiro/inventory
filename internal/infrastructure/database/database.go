@@ -13,13 +13,13 @@ import (
 var DB *gorm.DB
 
 func Initialize(prod bool) {
-	dsn := "sqlserver://SA:develop123@localhost:1433?database=inventories&connection+timeout=30"
+
+	dsn := "sqlserver://SA:develop123@172.20.26.54?database=inventories&connection+timeout=30"
 	config := gorm.Config{
 		NamingStrategy: schema.NamingStrategy{
 			TablePrefix:   "",   // table name prefix, table for `User` would be `t_users`
 			SingularTable: true, // use singular table name, table for `User` would be `user` with this option enabled
 			NoLowerCase:   true, // skip the snake_casing of names
-
 		},
 	}
 	// Initialize the GORM DB instance

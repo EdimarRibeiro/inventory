@@ -7,7 +7,7 @@ import (
 type InventoryFile struct {
 	Id          uint64 `gorm:"primaryKey"`
 	InventoryId uint64
-	Inventory   Inventory `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;"`
+	Inventory   Inventory `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;" json:"-"`
 	FileName    string    `gorm:"size:500"`
 	FileType    string    `gorm:"size:3"`
 	Processed   bool
@@ -19,7 +19,7 @@ func (c *InventoryFile) Validate() error {
 	}
 
 	if c.FileName == "" {
-		return errors.New("the value fileName is inválid! ")
+		return errors.New("the value fileName is invalid! ")
 	}
 
 	return nil

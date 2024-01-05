@@ -3,14 +3,13 @@ package infrastructure
 import (
 	"encoding/xml"
 	"errors"
-	"io/ioutil"
-	"os"
 	"strconv"
 	"strings"
 
 	"github.com/EdimarRibeiro/inventory/internal/entities"
 	"github.com/EdimarRibeiro/inventory/internal/infrastructure/database"
 	entitiesinterface "github.com/EdimarRibeiro/inventory/internal/interfaces/entities"
+	"github.com/EdimarRibeiro/inventory/internal/internalfunc"
 	"github.com/EdimarRibeiro/inventory/internal/models"
 )
 
@@ -61,14 +60,7 @@ func (imp *ImportFileXml) Execute(file *entities.InventoryFile) error {
 	}
 
 	database.Initialize(true)
-
-	xmlFile, err := os.Open(file.FileName)
-	if err != nil {
-		return err
-	}
-
-	defer xmlFile.Close()
-	byteValue, err := ioutil.ReadAll(xmlFile) //Load byteFile
+	byteValue, err := internalfunc.DownloadFile(file.FileName)
 	if err != nil {
 		return err
 	}
@@ -78,15 +70,13 @@ func (imp *ImportFileXml) Execute(file *entities.InventoryFile) error {
 	if err != nil {
 		return err
 	}
-
-	tenRep := &database.TenantRepository{DB: database.DB}
 	inveRep := &database.InventoryRepository{DB: database.DB}
 	prodRepo := &database.ProductRepository{DB: database.DB}
 	partRepo := &database.ParticipantRepository{DB: database.DB}
 
 	inventoryId := file.InventoryId
 
-	invs, err := inveRep.Search("Id=" + strconv.FormatUint(inventoryId, 10))
+	invs, err := inveRep.Search("Inventory.Id=" + strconv.FormatUint(inventoryId, 10))
 	if err != nil {
 		return err
 	}
@@ -97,22 +87,22 @@ func (imp *ImportFileXml) Execute(file *entities.InventoryFile) error {
 	}
 	tenantId := invs[0].TenantId
 
-	tens, err := tenRep.Search("Id=" + strconv.FormatUint(tenantId, 10))
+	pars, err := partRepo.Search("Id=" + strconv.FormatUint(invs[0].ParticipantId, 10))
 	if err != nil {
 		return err
 	}
 
-	if len(tens) == 0 {
-		err = errors.New("tenant not found")
+	if len(pars) == 0 {
+		err = errors.New("paticipant not found")
 		return err
 	}
 
-	tenant := tens[0]
+	participant := pars[0]
 	operationId := nFeXml.Nfe.InfNFe.Ide.TpNF
 	emitentTypeId := 0
 
-	if nFeXml.Nfe.InfNFe.Emit.CNPJ != tenant.Document {
-		if (nFeXml.Nfe.InfNFe.Dest.CNPJ + nFeXml.Nfe.InfNFe.Dest.CPF) != tenant.Document {
+	if nFeXml.Nfe.InfNFe.Emit.CNPJ != participant.Document {
+		if (nFeXml.Nfe.InfNFe.Dest.CNPJ + nFeXml.Nfe.InfNFe.Dest.CPF) != participant.Document {
 			err = errors.New("xml does not belong to this inventory")
 			return err
 		} else {

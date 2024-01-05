@@ -9,16 +9,16 @@ import (
 /*C170*/
 type DocumentItem struct {
 	DocumentId         uint64   `gorm:"primaryKey"`
-	Document           Document `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;"`
+	Document           Document `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;" json:"-"`
 	Sequency           string   `gorm:"primaryKey;size:3"`
 	InventoryId        uint64
-	Inventory          Inventory `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;"`
+	Inventory          Inventory `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;" json:"-"`
 	ProductId          uint64
 	Product            Product `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;"`
 	Complememt         string  `gorm:"size:255"`
 	Quantity           float64 `gorm:"type:decimal (18,5)"`
 	UnitId             string  `gorm:"size:6"`
-	Unit               Unit    `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;"`
+	Unit               Unit    `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;" json:"-"`
 	Value              float64 `gorm:"type:decimal (18,2)"`
 	Discount           float64 `gorm:"type:decimal (12,2)"`
 	MovimentType       string  `gorm:"size:1"`

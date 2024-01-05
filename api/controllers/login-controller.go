@@ -3,7 +3,6 @@ package controllers
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"net/http"
 	"time"
 
@@ -36,8 +35,6 @@ func (login *loginControler) GetUserLogin(credentials models.Credentials) (*enti
 
 func AuthenticateUser(login *loginControler, credentials models.Credentials) (*bool, *uint64, error) {
 	user, err := login.GetUserLogin(credentials)
-
-	fmt.Println(credentials, user)
 	if err != nil {
 		return nil, nil, err
 	}

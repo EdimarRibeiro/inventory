@@ -9,7 +9,7 @@ import (
 )
 
 func TestValidInventoryCreate(t *testing.T) {
-	model := entities.Inventory{Id: 0, TenantId: 10, Name: "Jan-2023"}
+	model := entities.Inventory{Id: 0, TenantId: 10, ParticipantId: 10, Name: "Jan-2023"}
 	assert.NoError(t, model.Validate(), nil)
 }
 func TestValidInventoryCreateError(t *testing.T) {

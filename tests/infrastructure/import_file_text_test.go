@@ -21,12 +21,11 @@ func TestValidImportFileText(t *testing.T) {
 
 	impt := infrastructure.CreateImportFileText(inveRep, invPRep, unitRep, uniCRep, partRep, prodRep, docuRep, docIRep)
 
-	invs, err := inveRep.Search("InventoryId >= 1 and FileType ='txt'")
+	invs, err := inveRep.Search("InventoryFile.InventoryId >= 1 and InventoryFile.FileType ='txt'")
 	assert.NoError(t, err, nil)
 
 	for i := 0; i < len(invs); i++ {
 		item := invs[i]
-
 		err = impt.Execute(&item)
 		assert.NoError(t, err, nil)
 	}

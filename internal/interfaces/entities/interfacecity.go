@@ -7,4 +7,5 @@ import (
 type CityRepositoryInterface interface {
 	Save(model *entities.City) (*entities.City, error)
 	GetCityId(value string) (uint64, error)
+	Search(where string) ([]entities.City, error)
 }

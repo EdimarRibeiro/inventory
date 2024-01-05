@@ -11,9 +11,9 @@ import (
 type Document struct {
 	Id            uint64    `gorm:"primaryKey;autoIncrement:true"`
 	InventoryId   uint64    `gorm:"index:idx_Inventory"`
-	Inventory     Inventory `gorm:"constraint:OnUpdate:SET NULL,OnDelete:SET NULL;"`
+	Inventory     Inventory `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;" json:"-"`
 	ParticipantId uint64
-	Participant   Participant `gorm:"constraint:OnUpdate:SET NULL,OnDelete:SET NULL;"`
+	Participant   Participant `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;"`
 	OperationId   string      `gorm:"size:1"`
 	EmitentTypeId string      `gorm:"size:1"`
 	ModelId       string      `gorm:"size:2"`

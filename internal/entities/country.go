@@ -17,7 +17,7 @@ func (c *Country) Validate() error {
 	}
 
 	if len(c.CountryCode) != 5 {
-		return errors.New("the country code is inválid! " + c.CountryCode)
+		return errors.New("the country code is invalid! " + c.CountryCode)
 	}
 	return nil
 }

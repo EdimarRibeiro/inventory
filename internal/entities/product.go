@@ -10,13 +10,13 @@ import (
 type Product struct {
 	Id            uint64 `gorm:"primaryKey;autoIncrement:true"`
 	TenantId      uint64
-	Tenant        Tenant  `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;"`
+	Tenant        Tenant  `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;" json:"-"`
 	OriginCode    string  `gorm:"size:60"`
 	Description   string  `gorm:"size:250"`
 	BarCode       string  `gorm:"size:60"`
 	OldOriginCode string  `gorm:"size:60"`
 	UnitId        string  `gorm:"size:6"`
-	Unit          Unit    `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;"`
+	Unit          Unit    `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;" json:"-"`
 	Type          string  `gorm:"size:2"`
 	NcmCode       string  `gorm:"size:8"`
 	ExIpi         string  `gorm:"size:3"`
@@ -36,7 +36,7 @@ func (c *Product) Validate() error {
 	}
 
 	if c.TenantId == 0 {
-		return errors.New("the tenantId is inválid")
+		return errors.New("the tenantId is invalid")
 	}
 
 	if c.UnitId == "" {
@@ -44,11 +44,11 @@ func (c *Product) Validate() error {
 	}
 
 	if len(c.UnitId) < 2 {
-		return errors.New("the min value unitId is inválid! " + c.UnitId)
+		return errors.New("the min value unitId is invalid! " + c.UnitId)
 	}
 
 	if len(c.UnitId) > 6 {
-		return errors.New("the max value unitId is inválid! " + c.UnitId)
+		return errors.New("the max value unitId is invalid! " + c.UnitId)
 	}
 
 	if c.Type == "" {
@@ -56,7 +56,7 @@ func (c *Product) Validate() error {
 	}
 
 	if c.NcmCode != "" && len(c.NcmCode) != 8 {
-		return errors.New("the value ncmCode is inválid")
+		return errors.New("the value ncmCode is invalid")
 	}
 
 	if c.GenderCode != "" && len(c.GenderCode) != 2 {
@@ -64,7 +64,7 @@ func (c *Product) Validate() error {
 	}
 
 	if c.CestCode != "" && len(c.CestCode) != 7 {
-		return errors.New("the value cestCode is inválid")
+		return errors.New("the value cestCode is invalid")
 	}
 	return nil
 }

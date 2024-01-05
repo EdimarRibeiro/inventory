@@ -10,7 +10,7 @@ import (
 type Participant struct {
 	Id           uint64 `gorm:"primaryKey;autoIncrement:true"`
 	TenantId     uint64
-	Tenant       Tenant `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;"`
+	Tenant       Tenant `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;" json:"-"`
 	OriginCode   string `gorm:"size:60"`
 	Name         string `gorm:"size:100"`
 	Document     string `gorm:"size:14"`

@@ -26,3 +26,12 @@ func (entity *CityRepository) GetCityId(value string) (uint64, error) {
 	}
 	return model.Id, nil
 }
+
+func (entity *CityRepository) Search(where string) ([]entities.City, error) {
+	var model []entities.City
+	result := entity.DB.Where(where).Find(&model)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return model, nil
+}

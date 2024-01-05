@@ -10,7 +10,7 @@ import (
 type Unit struct {
 	Id          string `gorm:"primaryKey;size:6"`
 	TenantId    uint64
-	Tenant      Tenant `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;"`
+	Tenant      Tenant `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;" json:"-"`
 	Description string `gorm:"size:50"`
 }
 
@@ -22,11 +22,11 @@ func (c *Unit) Validate() error {
 		return errors.New("the tenantId is required")
 	}
 	if len(c.Id) < 2 {
-		return errors.New("the min value unit is inválid! " + c.Id)
+		return errors.New("the min value unit is invalid! " + c.Id)
 	}
 
 	if len(c.Id) > 6 {
-		return errors.New("the max value unit is inválid! " + c.Id)
+		return errors.New("the max value unit is invalid! " + c.Id)
 	}
 	return nil
 }

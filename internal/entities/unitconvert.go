@@ -9,11 +9,11 @@ import (
 /*0220*/
 type UnitConvert struct {
 	UnitId           string  `gorm:"primaryKey;size:6"`
-	Unit             Unit    `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;"`
+	Unit             Unit    `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;" json:"-"`
 	ProductId        uint64  `gorm:"primaryKey"`
 	Product          Product `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;"`
 	TenantId         uint64  `gorm:"primaryKey"`
-	Tenant           Tenant  `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;"`
+	Tenant           Tenant  `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;" json:"-"`
 	ConversionFactor float64 `gorm:"type:decimal (18,6)"`
 	BarCode          string  `gorm:"primaryKey;size:60"`
 }
@@ -24,11 +24,11 @@ func (c *UnitConvert) Validate() error {
 	}
 
 	if len(c.UnitId) < 2 {
-		return errors.New("the min value unitId is inválid! " + c.UnitId)
+		return errors.New("the min value unitId is invalid! " + c.UnitId)
 	}
 
 	if len(c.UnitId) > 6 {
-		return errors.New("the max value unitId is inválid! " + c.UnitId)
+		return errors.New("the max value unitId is invalid! " + c.UnitId)
 	}
 
 	if c.ProductId == 0 {

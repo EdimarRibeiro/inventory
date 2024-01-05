@@ -51,10 +51,12 @@ func TestValidDocumentItemCreateDataBase(t *testing.T) {
 	}
 	tenantId = tens[len(tens)-1].Id
 
-	invs, err := invRepo.Search("Id >= 1")
+	invs, err := invRepo.Search("Inventory.Id >= 1")
 	assert.NoError(t, err, nil)
 	if err != nil || len(invs) == 0 {
-		inv, err := entities.NewInventory(tenantId, "Teste")
+		participantId, err := GetParticipantData(partRepo, tenantId)
+		assert.NoError(t, err, nil)
+		inv, err := entities.NewInventory(tenantId, participantId, "Teste")
 		assert.NoError(t, err, nil)
 		inv, err = invRepo.Save(inv)
 		assert.NoError(t, err, nil)

@@ -24,7 +24,7 @@ func (entity *InventoryProductRepository) Save(model *entities.InventoryProduct)
 
 func (entity *InventoryProductRepository) Search(where string) ([]entities.InventoryProduct, error) {
 	var model []entities.InventoryProduct
-	result := entity.DB.Where(where).Find(&model)
+	result := entity.DB.InnerJoins("Product").Where(where).Find(&model)
 	if result.Error != nil {
 		return nil, result.Error
 	}

@@ -24,7 +24,7 @@ func (c *User) Validate() error {
 		return errors.New("the password is required")
 	}
 	if c.TenantId == 0 {
-		return errors.New("the tenantId is inválid")
+		return errors.New("the tenantId is invalid")
 	}
 	return nil
 }

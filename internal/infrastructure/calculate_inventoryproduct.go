@@ -32,7 +32,7 @@ func calculeted(sum *SumaryQuantityDocumentItem, calc *CalculateBalanceQuantityD
 	}
 
 	for _, sumary := range *sumaries {
-		invs, err := calc.InventoryProduct.Search("InventoryId=" + strconv.FormatUint(sumary.InventoryId, 10) + " and ProductId=" + strconv.FormatUint(sumary.ProductId, 10))
+		invs, err := calc.InventoryProduct.Search("InventoryProduct.InventoryId=" + strconv.FormatUint(sumary.InventoryId, 10) + " and InventoryProduct.ProductId=" + strconv.FormatUint(sumary.ProductId, 10))
 
 		if err != nil {
 			return err

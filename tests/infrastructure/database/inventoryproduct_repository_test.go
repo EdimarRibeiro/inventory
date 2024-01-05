@@ -18,6 +18,7 @@ func TestValidInventoryProductCreateDataBase(t *testing.T) {
 	perRepo := &database.PersonRepository{DB: database.DB}
 	produRepo := &database.ProductRepository{DB: database.DB}
 	unitRepo := &database.UnitRepository{DB: database.DB}
+	partRepo := &database.ParticipantRepository{DB: database.DB}
 
 	var tenantId uint64 = 0
 	tens, err := tenRepo.Search("Id >= 1")
@@ -49,7 +50,9 @@ func TestValidInventoryProductCreateDataBase(t *testing.T) {
 
 	invs, err := invRepo.Search("Id >= 1")
 	if err != nil || len(invs) == 0 {
-		inv, err := entities.NewInventory(tenantId, "Dez 2023")
+		participantId, err := GetParticipantData(partRepo, tenantId)
+		assert.NoError(t, err, nil)
+		inv, err := entities.NewInventory(tenantId, participantId, "Dez 2023")
 		assert.NoError(t, err, nil)
 		err = inv.Validate()
 		assert.NoError(t, err, nil)

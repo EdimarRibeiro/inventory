@@ -17,7 +17,7 @@ func (c *City) Validate() error {
 	}
 
 	if len(c.CityCode) != 7 {
-		return errors.New("the city code is inválid! " + c.CityCode)
+		return errors.New("the city code is invalid! " + c.CityCode)
 	}
 	return nil
 }

@@ -17,7 +17,7 @@ func TestValidCalculateSumaryQuantityDataBase(t *testing.T) {
 	prodRepo := database.CreateInventoryProductRepository(database.DB)
 	docItemRepo := database.CreateDocumentItemRepository(database.DB)
 
-	inves, err := invRepo.Search("Id>= 1 and Cloused=0")
+	inves, err := invRepo.Search("Inventory.Id>= 1 and Cloused=0")
 	assert.NoError(t, err, nil)
 
 	calc := infrastructure.CreateCalculateBalanceQuantityData(prodRepo, docItemRepo)

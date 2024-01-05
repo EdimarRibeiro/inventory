@@ -2,7 +2,6 @@ package infrastructure
 
 import (
 	"errors"
-	"io/ioutil"
 	"strconv"
 	"strings"
 	"time"
@@ -10,6 +9,7 @@ import (
 	"github.com/EdimarRibeiro/inventory/internal/entities"
 	"github.com/EdimarRibeiro/inventory/internal/infrastructure/database"
 	entitiesinterface "github.com/EdimarRibeiro/inventory/internal/interfaces/entities"
+	"github.com/EdimarRibeiro/inventory/internal/internalfunc"
 	"github.com/EdimarRibeiro/inventory/internal/utils"
 )
 
@@ -61,7 +61,11 @@ func (imp *ImportFileText) Execute(file *entities.InventoryFile) error {
 
 	database.Initialize(true)
 
-	conteudo, _ := ioutil.ReadFile(file.FileName)
+	conteudo, err := internalfunc.DownloadFile(file.FileName)
+	if err != nil {
+		return err
+	}
+
 	lines := strings.Split(string(conteudo), "\n")
 	key := ""
 	doc := &entities.Document{}
@@ -71,7 +75,7 @@ func (imp *ImportFileText) Execute(file *entities.InventoryFile) error {
 	prodRepo := &database.ProductRepository{DB: database.DB}
 	partRepo := &database.ParticipantRepository{DB: database.DB}
 
-	invs, err := inveRep.Search("Id =" + strconv.FormatUint(file.InventoryId, 10))
+	invs, err := inveRep.Search("Inventory.Id =" + strconv.FormatUint(file.InventoryId, 10))
 	if err != nil {
 		return err
 	}
