@@ -1,6 +1,6 @@
 package models
 
-type ResponseCep struct {
+type ResponseZipCode struct {
 	CEP         string `json:"cep"`
 	Logradouro  string `json:"logradouro"`
 	Complemento string `json:"complemento"`

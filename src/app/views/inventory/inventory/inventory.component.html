@@ -1,0 +1,73 @@
+<div class="card p-shadow-8">
+  <div class="p-fluid">
+    <div class="p-field p-grid">
+      <div class="p-col-12 p-md-10"></div>
+      <label class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">
+        <button [routerLink]="['/inventory/edit']" routerLinkActive="router-link-active" style="float: right; margin-right: 2px" pButton
+          type="button" icon="pi pi-plus" label="Novo"></button>
+      </label>
+    </div>
+  </div>
+
+  <!--app-filtro-dinamico [(configuracao)]="configuracaoFiltro" (showChange)="showChange($event)"></app-filtro-dinamico-->
+  <p-table [pageLinks]="5" [value]="dataSource()" [(first)]="paginacaoConfig.numeroPagina" [paginator]="true" 
+    responsiveLayout="stack" [resizableColumns]="true" [rows]="paginacaoConfig.numeroRows" [showCurrentPageReport]="true"
+    currentPageReportTemplate="Exibindo {first} a {last} de {{paginacaoConfig.totalPagina}} itens" (onPage)="paginar($event)">
+    <ng-template pTemplate="header">
+      <tr>
+        <th width="100vh">Código</th>
+        <th width="35%">Nome</th>
+        <th width="30%">Data</th>
+        <th width="15%">Processado</th>
+        <th width="10%">Fechado</th>
+        <th width="96vh"></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-row let-i="rowIndex">
+      <tr *ngIf="row">
+        <td width="100vh">
+          <span class="p-column-title">Código</span> {{ row.id }}
+        </td>
+        <td width="35%">
+          <span class="p-column-title">Name</span> {{ row.name }}
+        </td>
+        <td width="30%">
+          <span class="p-column-title">Data</span>
+          {{ row.startDate }}
+        </td>
+        <td width="15%">
+          <span class="p-column-title">Processado</span> {{ row.processed === 1 ? 'Sim' : 'Não' }}
+        </td>
+        <td width="10%">
+          <span class="p-column-title">Fechado</span>
+          {{ row.cloused === 1 ? 'Sim' : 'Não'}}
+        </td>
+        
+        <td width="96vh">
+          <button pButton type="button" icon="pi pi-pencil" (click)="edit(row)"></button>
+          <button pButton type="button" icon="pi pi-trash" (click)="delete(row)" class="p-button-danger" style="left: 11px"></button>
+        </td>
+      </tr>
+      <tr *ngIf="!row">
+        <td width="100vh">
+          <p-skeleton></p-skeleton>
+        </td>
+        <td>
+          <p-skeleton></p-skeleton>
+        </td>
+        <td>
+          <p-skeleton></p-skeleton>
+        </td>
+        <td width="25%">
+          <p-skeleton></p-skeleton>
+        </td>
+        <td width="96vh">
+          <p-skeleton></p-skeleton>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<p-confirmDialog acceptLabel="Sim" rejectLabel="Não" header="Confirmation" [style]="{ width: '50vw' }" [autoZIndex]="true" rejectButtonStyleClass="p-button-text"></p-confirmDialog>
+<p-toast key="001"></p-toast>

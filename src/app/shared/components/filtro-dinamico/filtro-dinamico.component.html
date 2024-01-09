@@ -1,0 +1,60 @@
+<div [formGroup]="formModel" class="p-fluid p-formgrid p-grid" style="margin-top: -25px;">
+    <div class="p-field p-col-12 p-md-2">
+        <label>Campo do Filtro</label>
+        <p-dropdown (onChange)="campoSelecionado($event.value)" formControlName="campo" [options]="configuracao?.dataSourceCampos" placeholder="Campo do Filtro" optionLabel="descricao" [showClear]="true"></p-dropdown>
+        <small class="p-invalid" *ngIf="(dataSourceListaPesquisas.length == 0) && submitted && !formModel.controls['campo'].valid">Este campo é obrigatório.</small>
+    </div>
+    <div class="p-field p-col-12 p-md-2">
+        <label>Operação</label>
+        <p-dropdown formControlName="operacao" [options]="dataSourceOperacao" placeholder="Operação" optionDisabled="inativo" optionLabel="descricao" [showClear]="true"></p-dropdown>
+        <small class="p-invalid" *ngIf="(dataSourceListaPesquisas.length == 0) && submitted && !formModel.controls['operacao'].valid">Este campo é obrigatório.</small>
+    </div>
+    <!-------------------------- String e Número  ---------------->
+    <div *ngIf="(formModel.value.tipo == 'number' || formModel.value.tipo == 'string' || !formModel.controls['campo'].valid)" class="p-field p-col-12 p-md-4">
+        <label>Valor Filtro</label>
+        <input *ngIf="formModel.value.tipo === 'string'" formControlName="valor" type="text" pInputText>
+        <p-inputNumber *ngIf="formModel.value.tipo === 'number'" formControlName="valor"></p-inputNumber>
+        <small class="p-invalid" *ngIf="(dataSourceListaPesquisas.length == 0) && submitted && !formModel.controls['tipo'].valid">Este campo é obrigatório.</small>
+    </div>
+
+    <!-------------------------- Data   -------------------------->
+    <ng-container *ngIf="(formModel.value.tipo === 'date' || formModel.value.tipo === 'dateTime')">
+        <div class="p-field p-col-12 p-md-2">
+            <label>Data Início</label>
+            <p-calendar formControlName="dataInicio" [showIcon]="true" dateFormat="dd/mm/yy">
+            </p-calendar>
+            <small class="p-invalid" *ngIf="submitted && !formModel.controls['dataInicio'].valid">Este campo é obrigatório.</small>
+        </div>
+        <div class="p-field p-col-12 p-md-2">
+            <label>Data Fim</label>
+            <p-calendar formControlName="dataFim" [showIcon]="true" dateFormat="dd/mm/yy">
+            </p-calendar>            
+            <small class="p-invalid" *ngIf="(dataSourceListaPesquisas.length == 0) && submitted && !formModel.controls['dataFim'].valid">Este campo é obrigatório.</small>
+        </div>
+    </ng-container>
+
+    <!-------------------------- Lista  ---------------->
+    <div *ngIf="formModel.value.tipo == 'lista'" class="p-field p-col-12 p-md-4">
+        <label>Valor Filtro</label>
+        <p-dropdown formControlName="valor" [options]="dataSourceLista" optionLabel="descricao" [showClear]="true"></p-dropdown>
+        <small class="p-invalid" *ngIf="(dataSourceListaPesquisas.length == 0) && submitted && !formModel.controls['valor'].valid">Este campo é obrigatório.</small>
+    </div>
+
+    <div class="p-field p-col-12 p-md-1">
+        <label>Condição</label>
+        <p-dropdown formControlName="condicao" [options]="dataSourceCondicao" placeholder="Condição" optionLabel="descricao" [showClear]="true"></p-dropdown>
+        <small class="p-invalid" *ngIf="(dataSourceListaPesquisas.length >= 1) && submitted && !formModel.controls['condicao'].valid">Este campo é obrigatório.</small>
+    </div>
+    <div class="p-field p-col-12 p-md-1">
+        <label>Nº Pags</label>
+        <p-inputNumber formControlName="paginas" [min]="20" [max]="500" (ngModelChange)="UpdatePage($event)"></p-inputNumber>
+    </div>  
+    <p-button (click)="adicionarListaPesquisa()" icon="pi pi-plus"></p-button>
+    <p-button (click)="filtrar(formModel.value)" label="Filtrar" icon="pi pi-filter" styleClass="p-button-warning"></p-button>
+    <p-button (click)="limparFiltro()" icon="pi pi-times" styleClass="p-button-danger"></p-button>
+    <ng-container *ngFor="let item of dataSourceListaPesquisas">
+        <p-chip [styleClass]="'custom-chip ' + item.tipo" (onRemove)="removerDaListaPesquisa(item)" label="{{item.descricao}}" [removable]="item.tipo === 'operacao'"></p-chip>
+    </ng-container>
+</div>
+
+<p-toast key="001" [autoZIndex]="true"></p-toast>

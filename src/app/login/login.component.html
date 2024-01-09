@@ -1,0 +1,190 @@
+<div class="login-body">
+  <div class="login-panel"></div>
+  <div class="login-content">
+    <form [formGroup]="modelForm">
+      <img src="./assets/layout/images/logo-branca.jpg" alt="DebitConvert" />
+
+      <p>Bem-vindo, use suas credenciais para acessar ao sistema</p>
+
+      <div class="login-input-wrapper">
+        <input formControlName="username" pInputText type="text" autocomplete="off" placeholder="Email">
+      </div>
+
+      <div class="login-input-wrapper">
+        <input formControlName="password" pPassword type="password" autocomplete="off" placeholder="Senha">
+      </div>
+      <div style="width: 500px">
+        <p-messages [(value)]="errors" [closable]="false"></p-messages>
+      </div>
+      <div>
+        <button pButton type="button" label="Entrar" (click)="login()"></button>
+      </div>
+      <div>
+        <label
+          style="color: rgb(0, 0, 0);font-size: 16px;position: relative; right: 10px; margin-left: 30px; top:30px; font-weight: 300;"
+          (click)="criarAccount()">Crie sua Conta</label>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="p-fluid">
+  <p-sidebar [(visible)]="registroAccount" [fullScreen]="true" (onHide)="back()" [autoZIndex]="true">
+    <ng-container>
+      <div class="p-fluid">
+        <p-steps [model]="items" [(activeIndex)]="activeIndex" [readonly]="true"></p-steps>
+      </div>
+      <form [formGroup]="modelFormAccount">
+        <div style="width: 500px;">
+          <p-messages [(value)]="errors"></p-messages>
+        </div>
+        <div *ngIf="activeIndex === 0" style="margin-top: 51px;" class="p-fluid">
+          <div class="p-field p-grid">
+            <label class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">CNPJ</label>
+            <div class="p-col-12 p-md-4">
+              <input type="text" pInputText formControlName="document" placeholder="Informe seu CNPJ" />
+              <small class="p-invalid"
+                *ngIf="!modelFormAccount.controls['document'].valid&&modelFormAccount.controls['document'].dirty">Este campo é
+                obrigatório.</small>
+            </div>
+          </div>
+          <div class="p-fluid p-formgrid p-grid">
+            <div class="p-field p-col-12 p-md-1"></div>
+            <div class="p-field p-col-12 p-md-4">
+              <button pButton [disabled]="!modelFormAccount.controls['document'].valid" type="button" label="Avançar"
+                (click)="verificarDocumento(modelFormAccount.value.document)"></button>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="activeIndex === 1" style="margin-top: 21px;" class="p-fluid">
+          <div class="p-field p-grid">
+            <label class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Email</label>
+            <div class="p-col-12 p-md-4">
+              <input type="text" pInputText formControlName="email" placeholder="Informe o Email de Login" />
+              <small class="p-invalid"
+                *ngIf="!isEmail(modelFormAccount.controls['email'].value)||!modelFormAccount.controls['email'].valid&&modelFormAccount.controls['email'].dirty">Este campo é
+                obrigatório.</small>
+            </div>
+          </div>
+          <div class="p-field p-grid">
+            <label class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Senha</label>
+            <div class="p-col-12 p-md-4">
+              <input type="password" pInputText formControlName="password" placeholder="Informe a Senha de Login" />
+              <small class="p-invalid"
+                *ngIf="!modelFormAccount.controls['password'].valid&&modelFormAccount.controls['password'].dirty">Este campo é
+                obrigatório.</small>
+            </div>
+          </div>
+          <div class="p-grid"></div>
+          <div class="p-grid">
+            <div class="p-col-1"></div>
+            <div class="p-col-4">
+              <button pButton
+                [disabled]="!modelFormAccount.controls['email'].valid || !modelFormAccount.controls['password'].valid"
+                type="button" label="Avançar" (click)="isEmail(modelFormAccount.value.email)"></button>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="activeIndex === 2" style="margin-top: 51px;" class="p-fluid">
+          <div class="p-field p-grid">
+            <label class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Nome</label>
+            <div class="p-col-12 p-md-4">
+              <input type="text" pInputText formControlName="name" placeholder="Informe o Nome" />
+              <small class="p-invalid"
+                *ngIf="!modelFormAccount.controls['name'].valid&&modelFormAccount.controls['name'].dirty">Este campo é
+                obrigatório.</small>
+            </div>
+          </div>
+          <div class="p-field p-grid">
+            <label class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Fantasia</label>
+            <div class="p-col-12 p-md-4">
+              <input type="text" pInputText formControlName="fantasia" placeholder="Informe o Nome Fantasia" />
+            </div>
+          </div>
+          <div class="p-field p-grid">
+            <label class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">IE</label>
+            <div class="p-col-12 p-md-4">
+              <input type="text" pInputText formControlName="registration" placeholder="Informe Insc. Estadual" />
+            </div>
+          </div>
+          <div class="p-field p-grid">
+            <label class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Accountto</label>
+            <div class="p-col-12 p-md-1">
+              <input type="text" pInputText formControlName="prefixo" placeholder="DDD" />
+            </div>
+            <div class="p-col-12 p-md-3">
+              <input type="text" pInputText formControlName="contato" placeholder="Nº do Telefone" />
+            </div>
+          </div>   
+          <div class="p-field p-grid">
+            <label class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Cep</label>
+            <div class="p-col-12 p-md-4">
+              <input type="text" pInputText formControlName="zipCode" placeholder="Informe seu Cep" />
+            </div>
+          </div>
+          <div class="p-field p-grid">
+            <label class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Endereço</label>
+            <div class="p-col-12 p-md-4">
+              <input type="text" pInputText formControlName="street" placeholder="Informe o Endereço" />
+            </div>
+          </div>
+          <div class="p-field p-grid">
+            <label class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Numero</label>
+            <div class="p-col-12 p-md-4">
+              <input type="text" pInputText formControlName="number" placeholder="Informe o Número" />
+            </div>
+          </div>
+          <div class="p-field p-grid">
+            <label class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Complemento</label>
+            <div class="p-col-12 p-md-4">
+              <input type="text" pInputText formControlName="complement" placeholder="Informe o Complemento" />
+            </div>
+          </div>
+          <div class="p-field p-grid">
+            <label class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Bairro</label>
+            <div class="p-col-12 p-md-4">
+              <input type="text" pInputText formControlName="neighborhood" placeholder="Informe o Bairro" />
+            </div>
+          </div>
+          <div class="p-field p-grid">
+            <label class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Cidade</label>
+            <div class="p-col-12 p-md-4">
+              <p-dropdown [options]="dataSourceCity" [showClear]="true" formControlName="ciyId" optionLabel="nome"
+                [filter]="true" filterBy="nome" placeholder="Cidade"></p-dropdown>
+              <small class="p-invalid"
+                *ngIf="!modelFormAccount.controls['ciyId'].valid&&modelFormAccount.controls['ciyId'].dirty">Este campo
+                é obrigatório.</small>
+            </div>
+          </div>
+          <div class="p-grid"></div>
+          <div class="p-grid">
+            <div class="p-col-1"></div>
+            <div class="p-col-4">
+              <button pButton [disabled]="!modelFormAccount.valid" type="button" label="Avançar"
+                (click)="confirmarDados()"></button>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="activeIndex === 3" class="card card-w-title">
+          <div class="p-grid">
+            <div class="p-col-12">
+              <h2>Pronto, tudo certo voçê já pode logar no sistema e começar a trabalhar!!!!</h2>
+            </div>
+            <div class="p-grid"></div>
+            <div class="p-grid"></div>
+            <div class="p-grid"></div>
+            <div class="p-grid"></div>
+            <div class="p-grid"></div>
+            <div class="p-grid">
+              <div class="p-col-12">
+                <button pButton type="button" label="Concluir" (click)="back()"></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </ng-container>
+  </p-sidebar>
+</div>

@@ -8,6 +8,7 @@ require (
 	github.com/google/uuid v1.3.0
 	github.com/gorilla/mux v1.8.1
 	github.com/joho/godotenv v1.5.1
+	github.com/rs/cors v1.10.1
 	github.com/stretchr/testify v1.8.4
 	gorm.io/driver/sqlserver v1.5.2
 	gorm.io/gorm v1.25.5

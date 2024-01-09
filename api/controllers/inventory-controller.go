@@ -23,6 +23,12 @@ type inventoryProcessController struct {
 	DocumentItem     entitiesinterface.DocumentItemRepositoryInterface
 }
 
+type inventoryProcessCalcController struct {
+	Inventory        entitiesinterface.InventoryRepositoryInterface
+	InventoryProduct entitiesinterface.InventoryProductRepositoryInterface
+	DocumentItem     entitiesinterface.DocumentItemRepositoryInterface
+}
+
 type inventoryController struct {
 	inventory entitiesinterface.InventoryRepositoryInterface
 }
@@ -47,6 +53,16 @@ func CreateInventoryProcessController(inventoryFile entitiesinterface.InventoryF
 		Participant:      participant,
 		Product:          product,
 		Document:         document,
+		DocumentItem:     documentItem,
+	}
+}
+
+func CreateInventoryProcessCalcController(inventory entitiesinterface.InventoryRepositoryInterface,
+	inventoryProduct entitiesinterface.InventoryProductRepositoryInterface,
+	documentItem entitiesinterface.DocumentItemRepositoryInterface) *inventoryProcessCalcController {
+	return &inventoryProcessCalcController{
+		Inventory:        inventory,
+		InventoryProduct: inventoryProduct,
 		DocumentItem:     documentItem,
 	}
 }
@@ -206,7 +222,7 @@ func (repo *inventoryController) DeleteHandler(w http.ResponseWriter, r *http.Re
 	w.WriteHeader(http.StatusNoContent)
 }
 
-func (repo *inventoryProcessController) InventaryProcessHandler(w http.ResponseWriter, r *http.Request) {
+func (repo *inventoryProcessController) InventaryProcessFileHandler(w http.ResponseWriter, r *http.Request) {
 	_, _, err := common.ValidateToken(r)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
@@ -263,6 +279,40 @@ func (repo *inventoryProcessController) InventaryProcessHandler(w http.ResponseW
 			http.Error(w, "Erro in process XML file", http.StatusInternalServerError)
 			return
 		}
+	}
+
+	w.WriteHeader(http.StatusOK)
+}
+
+func (repo *inventoryProcessCalcController) InventaryProcessCalcHandler(w http.ResponseWriter, r *http.Request) {
+	_, _, err := common.ValidateToken(r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+	params := mux.Vars(r)
+	inventoryId, err := strconv.ParseUint(params["id"], 10, 64)
+	if err != nil {
+		http.Error(w, "Invalid inventory Id "+err.Error(), http.StatusBadRequest)
+		return
+	}
+	inves, err := repo.Inventory.Search("Inventory.Id = " + strconv.FormatUint(inventoryId, 10) + " and Inventory.Cloused=0")
+	if err != nil {
+		http.Error(w, " inventory id "+err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	if len(inves) == 0 {
+		http.Error(w, "Not Found inventory id ", http.StatusBadRequest)
+		return
+	}
+
+	calc := infrastructure.CreateCalculateBalanceQuantityData(repo.InventoryProduct, repo.DocumentItem)
+
+	err = calc.Execute(inves[0].Id)
+	if err != nil {
+		http.Error(w, " Error :"+err.Error(), http.StatusInternalServerError)
+		return
 	}
 
 	w.WriteHeader(http.StatusOK)

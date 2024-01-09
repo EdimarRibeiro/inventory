@@ -1,0 +1,25 @@
+<div class="loading">
+  <p-dialog
+    [breakpoints]="{ '960px': '75vw', '640px': '100vw' }"
+    [closable]="false"
+    [draggable]="false"
+    [blockScroll]="true"
+    [style]="{ width: '20vw', minWidth: '20vw' }"
+    [modal]="true"
+    [autoZIndex]="true"
+    [(visible)]="modal && carregando"
+  >
+    <ng-container>
+      <div>
+        <p-progressSpinner></p-progressSpinner>
+        <h2 class="message-loading">{{ mensagem }}</h2>
+      </div>
+    </ng-container>
+  </p-dialog>
+  <div *ngIf="!modal && carregando">
+    <div>
+      <p-progressSpinner></p-progressSpinner>
+      <h2 class="message-loading">{{ mensagem }}</h2>
+    </div>
+  </div>
+</div>

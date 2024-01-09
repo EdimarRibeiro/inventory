@@ -11,6 +11,22 @@ import (
 	"github.com/joho/godotenv"
 )
 
+func corsMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// Adicionar logs para depuração
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+
+		if r.Method == "OPTIONS" {
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	})
+}
+
 func main() {
 	println("Initial")
 	if err := godotenv.Load(); err != nil {
@@ -38,12 +54,16 @@ func main() {
 	inventoryFile := controllers.CreateInventoryFileController(inventoryFileRepo)
 	inventoryProduct := controllers.CreateInventoryProductController(inventoryProductRepo)
 	inventoryProcess := controllers.CreateInventoryProcessController(inventoryFileRepo, inventoryProductRepo, unitRep, unitConvertRep, partRep, prodRep, docRep, docItemRep)
+	inventoryCalc := controllers.CreateInventoryProcessCalcController(inventoryRepo, inventoryProductRepo, docItemRep)
 
 	fileUpload := controllers.CreateFileUploadController(tenRepo)
 	createAccount := controllers.CreateAccountController(tenRepo, personRepo, userRepo, cityRepo)
 	userLogin := controllers.CreateLogin(userRepo)
 
 	router := mux.NewRouter()
+
+	// Aplicar el middleware CORS a todas las rutas
+	router.Use(corsMiddleware)
 
 	// Handle POST requests to /api/createaccount with the CreateAccountHandler function
 	router.HandleFunc("/api/createaccount", createAccount.CreateAccountHandler).Methods("POST")
@@ -55,14 +75,15 @@ func main() {
 	router.HandleFunc("/api/document/{document}", createAccount.GetDocumentHandler).Methods("GET")
 
 	// Auth validate
-	// Handle POST requests to /api/download with the HandleFileDownload function
+	// Private route Handle POST requests to /api/download with the HandleFileDownload function
 	router.HandleFunc("/api/download", fileUpload.HandleFileDownload).Methods("POST")
-	// Handle POST requests to /api/upload with the HandleFileUpload function
+	// Private route Handle POST requests to /api/upload with the HandleFileUpload function
 	router.HandleFunc("/api/upload", fileUpload.HandleFileUpload).Methods("POST")
 
 	/*************************************/
 
 	// Handle POST requests to /api/login with the LoginHandler function
+	router.HandleFunc("/api/login", userLogin.LoginHandler).Methods("OPTIONS")
 	router.HandleFunc("/api/login", userLogin.LoginHandler).Methods("POST")
 
 	// Private route to get all users (requires JWT)
@@ -84,7 +105,10 @@ func main() {
 	router.HandleFunc("/api/inventories", inventory.GetAllHandler).Methods("GET")
 
 	// Private route to get process inventory (requires JWT)
-	router.HandleFunc("/api/inventory/process/{id}", inventoryProcess.InventaryProcessHandler).Methods("GET")
+	router.HandleFunc("/api/inventory/process/{id}", inventoryProcess.InventaryProcessFileHandler).Methods("GET")
+
+	// Private route to get calc inventory (requires JWT)
+	router.HandleFunc("/api/inventory/calc/{id}", inventoryCalc.InventaryProcessCalcHandler).Methods("GET")
 
 	// Private route to get a specific inventory by ID (requires JWT)
 	router.HandleFunc("/api/inventory/{id}", inventory.GetByIdlHandler).Methods("GET")

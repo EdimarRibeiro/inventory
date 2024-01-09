@@ -1,0 +1,237 @@
+        /* You can add global styles to this file, and also import other style files */
+
+        h3 {
+          margin-block-start: 0;
+          margin-block-end: 0;
+        }
+
+        @import "../node_modules/primeng/resources/primeng.min.css";
+        @import "../node_modules/primeicons/primeicons.css";
+        @import "../node_modules/prismjs/themes/prism-coy.css";
+        @import "assets/demo/flags/flags.css";
+        @import "scss/styles.scss";
+
+        .ui-column-title {
+          display: none;
+        }
+
+        @media screen and (max-width: 40rem) {
+          .ui-column-title {
+            min-width: 30%;
+            display: inline-block;
+            font-weight: 700;
+          }
+
+          :host ::ng-deep {
+            .p-datatable {
+              &.p-datatable-responsive-demo {
+
+                .p-datatable-thead>tr>th,
+                .p-datatable-tfoot>tr>td {
+                  display: none !important;
+                }
+
+                .p-datatable-tbody>tr>td {
+                  text-align: left;
+                  display: block;
+                  width: 100%;
+                  float: left;
+                  clear: left;
+                  border: 0 none;
+
+                  .p-column-title {
+                    padding: .4rem;
+                    min-width: 30%;
+                    display: inline-block;
+                    margin: -.4em 1em -.4em -.4rem;
+                    font-weight: bold;
+                  }
+
+                  &:last-child {
+                    // border-bottom: 1px solid var(--surface-d);
+                    border-top: 1px solid red;
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        .customer-badge {
+          border-radius: 2px;
+          padding: .25em .5rem;
+          text-transform: uppercase;
+          font-weight: 700;
+          font-size: 12px;
+          letter-spacing: .3px;
+
+          &.situacao-1 {
+            background: #C8E6C9;
+            color: #256029;
+          }
+
+          &.situacao-0 {
+            background: #FFCDD2;
+            color: #C63737;
+          }
+
+          &.S {
+            background: #C8E6C9;
+            color: #256029;
+          }
+
+          &.I {
+            background: #FFCDD2;
+            color: #C63737;
+          }
+        }
+
+        .p-invalid {
+          color: red;
+        }
+
+        .obrigatorio:after {
+          content: " *";
+          color: red;
+        }
+
+        span.p-autocomplete {
+          width: 100% !important;
+        }
+
+        .p-btn {
+          text-align: right;
+        }
+
+        .mr-10 {
+          margin-right: 10px;
+        }
+
+        h4,
+        h2 {
+          text-align: left !important;
+          font-family: inherit !important;
+          font-weight: 100;
+          font-size: 1.25rem;
+          margin-bottom: 2rem;
+          margin-top: 0rem;
+        }
+
+        .p-field {
+          margin-bottom: 0.5rem !important;
+        }
+
+        .p-field label {
+          color: #535353;
+        }
+
+        .p-shadow-8 {
+          box-shadow: none !important;
+          border: 1px solid #ccc;
+        }
+
+        .p-datatable .p-datatable-tbody>tr>td {
+          padding: 1rem 1rem;
+        }
+
+        .p-datatable .p-datatable-thead>tr>th {
+          padding: 0.85rem 0.35rem;
+        }
+
+        .menssagemAviso {
+          opacity: 0.8;
+          margin-left: 0px;
+          font-size: 1.0rem;
+        }
+
+        .btn {
+          text-align: right;
+          width: 100%;
+        }
+
+        .btn .p-button {
+          width: initial;
+        }
+
+        .message-loading {
+          text-align: center !important;
+        }
+
+        p-progressSpinner {
+          left: 0px !important;
+        }
+
+        .p-progress-spinner {
+          width: 50px !important;
+          height: 50px !important;
+        }
+
+        .fl-r {
+          float: right;
+        }
+
+        .ml-5 {
+          margin-left: 5px !important;
+        }
+
+        .right {
+          text-align: right !important;
+        }
+
+        .field>label {
+          display: inline-block;
+          margin-bottom: 0.5rem;
+        }
+
+        .mr-10 {
+          margin-right: 10px;
+        }
+
+        .p-btn {
+          text-align: right;
+        }
+
+        .justify-content-between {
+          justify-content: space-between !important;
+        }
+
+        .flex {
+          display: flex !important;
+        }
+
+        .p-toast {
+          width: initial !important;
+        }
+
+        .layout-wrapper .layout-menu-container .layout-menu-logo a {
+          text-align: left;
+          padding-left: 10px;
+        }
+
+        @media screen and (max-width: 960px) {
+          .table-responsive {
+            display: block !important;
+          }
+
+          .p-datatable-tbody>tr>td.ajustar-cliente {
+            display: block !important;
+          }
+
+          .p-datatable-tbody>tr>td {
+            font-size: 0.8rem;
+            padding: 0.5rem 0.5rem !important;
+          }
+
+          .esconder-endereco {
+            display: none;
+          }
+        }
+
+
+        .p-buttonset .p-button:not(:last-child) {
+          border-right: 1px solid #ced4da !important;
+        }
+
+        .pointer {
+          cursor: pointer;
+        }

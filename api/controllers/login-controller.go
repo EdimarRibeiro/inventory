@@ -86,7 +86,7 @@ func (login *loginControler) LoginHandler(w http.ResponseWriter, r *http.Request
 		}
 		// Send the token in the response
 		w.Header().Set("Content-Type", "application/json")
-		json.NewEncoder(w).Encode(map[string]string{"token": token})
+		json.NewEncoder(w).Encode(models.ResponseLogin{Token: token, Authenticated: true, User: models.ResponseUser{Login: credentials.Username, Image: "https://pluspng.com/img-png/user-png-icon-young-user-icon-2400.png"}})
 	} else {
 		// Authentication failed
 		http.Error(w, "Invalid credentials", http.StatusUnauthorized)

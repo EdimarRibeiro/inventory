@@ -1,0 +1,55 @@
+<app-loading [carregando]="visivel && !objetoConsulta" [mensagem]="'Por favor, aguarde!'" [modal]="true"></app-loading>
+<p-dialog [breakpoints]="{ '960px': '75vw', '640px': '100vw' }" [closable]="false" *ngIf="visivel && objetoConsulta"
+  [header]="'Consulta de transação'" [modal]="true" [(visible)]="visivel">
+  <div class="p-grid" *ngIf="objetoConsulta">
+    <div class="p-md-12 p-xs-12">
+      <dl class="">
+        <dt>Txid</dt>
+        <dd>{{objetoConsulta.txid}}</dd>
+      </dl>
+    </div>
+    <div class="p-md-6 p-xs-12">
+      <dl class="">
+        <dt>Data criação</dt>
+        <dd>{{objetoConsulta.calendario.criacao | date : "dd/MM/yyyy HH:mm"}}</dd>
+      </dl>
+    </div>
+    <div class="p-md-6 p-xs-12" *ngIf="tipo == 'Imediato'">
+      <dl class="">
+        <dt>Expiração</dt>
+        <dd>{{objetoConsulta.calendario.expiracao}}</dd>
+      </dl>
+    </div>
+    <div class="p-md-6 p-xs-12" *ngIf="tipo == 'Prazo'">
+      <dl class="">
+        <dt>Data vencimento</dt>
+        <dd>{{objetoConsulta.calendario.dataDeVencimento | date : "dd/MM/yyyy"}}</dd>
+      </dl>
+    </div>
+    <div class="p-md-6 p-xs-12">
+      <dl class="">
+        <dt>Chave</dt>
+        <dd>{{objetoConsulta.chave}}</dd>
+      </dl>
+    </div>
+    <div class="p-md-6 p-xs-12">
+      <dl class="">
+        <dt>Valor</dt>
+        <dd>{{objetoConsulta.valor.original | currency : "BRL" : "symbol" : "1.2"}}</dd>
+      </dl>
+    </div>
+    <div class="p-md-6 p-xs-12">
+      <dl class="">
+        <dt>Situação</dt>
+        <dd>
+          <p-badge size="large" [value]="objetoConsulta.status">
+          </p-badge>
+        </dd>
+      </dl>
+    </div>
+  </div>
+  <p-footer>
+    <button icon="pi pi-times" class="p-button p-component p-button-outlined p-button-secondary" pButton type="button"
+      [label]="'Fechar'" (click)="fechar()"></button>
+  </p-footer>
+</p-dialog>

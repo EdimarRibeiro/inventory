@@ -91,8 +91,8 @@ func replaceAllDoc(value string) string {
 	return strings.ReplaceAll(strings.ReplaceAll(strings.ReplaceAll(value, "-", ""), ".", ""), "/", "")
 }
 
-func (account *accountControler) GetCep(cep string) (*models.AccountAddress, error) {
-	url := "https://viacep.com.br/ws/" + cep + "/json/"
+func (account *accountControler) GetZipCode(zipCode string) (*models.AccountAddress, error) {
+	url := "https://viacep.com.br/ws/" + zipCode + "/json/"
 
 	headers := map[string]string{}
 
@@ -102,7 +102,7 @@ func (account *accountControler) GetCep(cep string) (*models.AccountAddress, err
 		return nil, err
 	}
 
-	var cepRes models.ResponseCep
+	var cepRes models.ResponseZipCode
 	err = json.Unmarshal(resp, &cepRes)
 	if err != nil {
 		return nil, fmt.Errorf("error deserializing JSON response: %v", err)
@@ -110,8 +110,8 @@ func (account *accountControler) GetCep(cep string) (*models.AccountAddress, err
 
 	cepRes.CEP = replaceAllDoc(cepRes.CEP)
 
-	if cepRes.CEP != cep {
-		return nil, errors.New("cep Notfound resp.:" + cepRes.CEP + " - req.:" + cep)
+	if cepRes.CEP != zipCode {
+		return nil, errors.New("cep Notfound resp.:" + cepRes.CEP + " - req.:" + zipCode)
 	}
 
 	response := &models.AccountAddress{
@@ -185,7 +185,7 @@ func (account *accountControler) GetDocument(document string) (*models.Account, 
 		Suframa:      "",
 	}
 
-	resCep, err := account.GetCep(cnpjRes.CEP)
+	resCep, err := account.GetZipCode(cnpjRes.CEP)
 	if err != nil {
 		return nil, err
 	}
@@ -217,7 +217,7 @@ func (account *accountControler) GetCepHandler(w http.ResponseWriter, r *http.Re
 		http.Error(w, "Invalid CEP "+cep, http.StatusBadRequest)
 		return
 	}
-	resp, err := account.GetCep(cep)
+	resp, err := account.GetZipCode(cep)
 	if err != nil {
 		http.Error(w, "Error retrieving "+err.Error(), http.StatusInternalServerError)
 		return

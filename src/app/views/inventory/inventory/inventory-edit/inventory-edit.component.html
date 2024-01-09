@@ -1,0 +1,80 @@
+<div class="card p-shadow-8">
+    <button style="float: right; " pButton type="button" icon="pi pi-arrow-left" label="Voltar" routerLink="/beneficiario/cliente"></button>
+    <h4 style="text-align: center;font-family: auto;">Dados Cliente</h4>
+    <!--form [formGroup]="formModel">
+        <div class="p-fluid">
+            <div class="p-field p-grid">
+                <label class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Nome</label>
+                <div class="p-col-12 p-md-10">
+                    <p-autoComplete formControlName="pessoaId" [suggestions]="resultsCliente" (completeMethod)="searchPessoa($event)" field="nome" [forceSelection]="true" placeholder="Pesquisar nome"></p-autoComplete>
+                    <small class="p-invalid" *ngIf="submitted && !formModel.controls['pessoaId'].valid">Este campo é obrigatório.</small>
+                </div>
+                <div class="p-col-12 p-md-1">
+                    <button [disabled]="formModel.value.edit" pButton type="button" icon="pi pi-plus" (click)="AdicionarCadastroGeral()"></button>
+                </div>
+            </div>            
+            <div class="p-field p-grid">
+                <label class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Situação</label>
+                <div class="p-col-12 p-md-10">
+                    <p-radioButton formControlName="ativoId" name="ativoId" value="1" label="Ativo" inputId="ativoIdAtivo"></p-radioButton>
+                    <p-radioButton formControlName="ativoId" [style]="{'margin-left': '30px'}" name="ativoId" value="0" label="Inativo" inputId="ativoIdInativo"></p-radioButton>
+                    <br>
+                    <small class="p-invalid" *ngIf="submitted && !formModel.controls['ativoId'].valid">Este campo é obrigatório.</small>
+                </div>
+            </div>
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-3"></div>
+                <div class="p-field p-col-12 p-md-6">
+                    <p-button *ngIf="!salvando" (click)="salvar()" icon="pi pi-save" iconPos="right" label="{{nomeBotao}}" styleClass="p-button-rounded"></p-button>
+                    <p-button *ngIf="salvando" icon="pi pi-spin pi-spinner" iconPos="right" label="{{nomeBotao}}" styleClass="p-button-rounded"></p-button>
+                </div>
+            </div>
+        </div> 
+        <p-tabView #tabGroup *ngIf="formModel.value.edit">
+            <p-tabPanel header="Forma de Pagamento">
+                <div class="p-grid">
+                    <div class="p-col">
+                        <h4 style="font-family: auto">Forma de Pagamento</h4>
+                    </div>
+                    <div style="padding-top: 23px">
+                        <div style="column-count: 1">
+                            <button pButton type="button" label="Nova Forma" icon="pi pi-check"
+                                (click)="adicionaForma()"></button>
+                        </div>
+                    </div>
+                </div>
+                <p-table [value]="dataSourceForma" responsiveLayout="stack" [resizableColumns]="true">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Forma de Pagamento</th>
+                            <th>Situação</th>
+                            <th width="96vh"></th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-row let-i="rowIndex">
+                        <tr>
+                            <td width="60%">
+                                <span class="p-column-title">Forma de Pagamento</span>
+                                {{ row.formaPagamento?.formaPagamentoTipo?.descricao }}
+                            </td>
+                            <td width="35%">
+                                <span class="p-column-title">Situação</span>          
+                                <span [class]="'customer-badge situacao-' + row.ativoId">
+                                  {{row.ativoId === 1 ? 'Ativo' : 'Inativo'}}
+                                </span>
+                              </td>
+                            <td width="96vh">
+                                <button pButton type="button" icon="pi pi-pencil" (click)="editForma(row)"></button>
+                                <button pButton type="button" icon="pi pi-trash" class="p-button-danger"
+                                    (click)="excluirForma(row)" style="float: right"></button>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </p-tabPanel>
+        </p-tabView>       
+    </form-->
+</div>
+
+<p-confirmDialog acceptLabel="Sim" rejectLabel="Não" header="Confirmation" [style]="{width: '50vw'}" [autoZIndex]="true" rejectButtonStyleClass="p-button-text"></p-confirmDialog>
+<p-toast key="001"></p-toast>

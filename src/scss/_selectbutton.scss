@@ -1,0 +1,10 @@
+.select-button {
+  .ui-buttonset {
+    .ui-button {
+      font-size: 12px !important;
+      @media (max-width: 1199px) {
+        font-size: 10px !important;
+      }
+    }
+  }
+}
