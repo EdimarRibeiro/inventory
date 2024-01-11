@@ -17,7 +17,7 @@ export class InventoryService {
     }
     
     getAllSearch(page: number, search: string): Observable<Inventory[]> {
-        return this.http.get<Inventory[]>(`${this.URLAll}/?page=${page}&&search=${search}`);
+        return this.http.get<Inventory[]>(`${this.URLAll}?page=${page}&&search=${search}`);
     }    
 
     getId(id: number): Observable<Inventory> {

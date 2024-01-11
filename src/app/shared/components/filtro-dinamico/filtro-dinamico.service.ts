@@ -36,7 +36,7 @@ export class FiltroDinamicoService {
     const ultimoIndex = indexAtual + numeroRows;
     if (this.searchSalvo) search = this.searchSalvo;
     this.validarJaAdicionado(indexAtual, search).then(() => {
-      this.loadGrid(numeroPagina, search+`&&linhas=${numeroRows}`).then((resultado: any) => {
+      this.loadGrid(numeroPagina, search+`&&rows=${numeroRows}`).then((resultado: any) => {
         this.configurarPaginacao(resultado.quantidadeDadosTotais, numeroRows).then(() => {
           this.adicionarDataSource(ultimoIndex, resultado.dados, indexAtual).then(() => {
             this.dataSourceCarregado = true;

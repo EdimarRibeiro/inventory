@@ -66,18 +66,23 @@ func main() {
 	router.Use(corsMiddleware)
 
 	// Handle POST requests to /api/createaccount with the CreateAccountHandler function
+	router.HandleFunc("/api/createaccount", createAccount.CreateAccountHandler).Methods("OPTIONS")
 	router.HandleFunc("/api/createaccount", createAccount.CreateAccountHandler).Methods("POST")
 
 	// Handle GET requests to /api/cep with the GetCepHandler function
+	router.HandleFunc("/api/cep/{cep}", createAccount.GetCepHandler).Methods("OPTIONS")
 	router.HandleFunc("/api/cep/{cep}", createAccount.GetCepHandler).Methods("GET")
 
 	// Handle GET requests to /api/document with the GetDocumentHandler function
+	router.HandleFunc("/api/document/{document}", createAccount.GetDocumentHandler).Methods("OPTIONS")
 	router.HandleFunc("/api/document/{document}", createAccount.GetDocumentHandler).Methods("GET")
 
 	// Auth validate
 	// Private route Handle POST requests to /api/download with the HandleFileDownload function
+	router.HandleFunc("/api/download", fileUpload.HandleFileDownload).Methods("OPTIONS")
 	router.HandleFunc("/api/download", fileUpload.HandleFileDownload).Methods("POST")
 	// Private route Handle POST requests to /api/upload with the HandleFileUpload function
+	router.HandleFunc("/api/upload", fileUpload.HandleFileUpload).Methods("OPTIONS")
 	router.HandleFunc("/api/upload", fileUpload.HandleFileUpload).Methods("POST")
 
 	/*************************************/
@@ -87,60 +92,79 @@ func main() {
 	router.HandleFunc("/api/login", userLogin.LoginHandler).Methods("POST")
 
 	// Private route to get all users (requires JWT)
+	router.HandleFunc("/api/cities", city.GetAllHandler).Methods("OPTIONS")
 	router.HandleFunc("/api/cities", city.GetAllHandler).Methods("GET")
 
 	// Private route to get all users (requires JWT)
+	router.HandleFunc("/api/users", user.GetAllHandler).Methods("OPTIONS")
 	router.HandleFunc("/api/users", user.GetAllHandler).Methods("GET")
 
 	// Private route to get a specific user by ID (requires JWT)
+	router.HandleFunc("/api/user/{id}", user.GetByIdlHandler).Methods("OPTIONS")
 	router.HandleFunc("/api/user/{id}", user.GetByIdlHandler).Methods("GET")
 
 	// Private route to update a user by ID (requires JWT)
+	router.HandleFunc("/api/user/{id}", user.UpdateHandler).Methods("OPTIONS")
 	router.HandleFunc("/api/user/{id}", user.UpdateHandler).Methods("PUT")
 
 	// Private route to delete a user by ID (requires JWT)
+	router.HandleFunc("/api/user/{id}", user.DeleteHandler).Methods("OPTIONS")
 	router.HandleFunc("/api/user/{id}", user.DeleteHandler).Methods("DELETE")
 
 	// Private route to get all inventories (requires JWT)
+	router.HandleFunc("/api/inventories", inventory.GetAllHandler).Methods("OPTIONS")
 	router.HandleFunc("/api/inventories", inventory.GetAllHandler).Methods("GET")
 
 	// Private route to get process inventory (requires JWT)
+	router.HandleFunc("/api/inventory/process/{id}", inventoryProcess.InventaryProcessFileHandler).Methods("OPTIONS")
 	router.HandleFunc("/api/inventory/process/{id}", inventoryProcess.InventaryProcessFileHandler).Methods("GET")
 
 	// Private route to get calc inventory (requires JWT)
+	router.HandleFunc("/api/inventory/calc/{id}", inventoryCalc.InventaryProcessCalcHandler).Methods("OPTIONS")
 	router.HandleFunc("/api/inventory/calc/{id}", inventoryCalc.InventaryProcessCalcHandler).Methods("GET")
 
 	// Private route to get a specific inventory by ID (requires JWT)
+	router.HandleFunc("/api/inventory/{id}", inventory.GetByIdlHandler).Methods("OPTIONS")
 	router.HandleFunc("/api/inventory/{id}", inventory.GetByIdlHandler).Methods("GET")
 
 	// Private route to update a inventory by ID (requires JWT)
+	router.HandleFunc("/api/inventory/{id}", inventory.UpdateHandler).Methods("OPTIONS")
 	router.HandleFunc("/api/inventory/{id}", inventory.UpdateHandler).Methods("PUT")
 
 	// Private route to delete a inventory by ID (requires JWT)
+	router.HandleFunc("/api/inventory/{id}", inventory.DeleteHandler).Methods("OPTIONS")
 	router.HandleFunc("/api/inventory/{id}", inventory.DeleteHandler).Methods("DELETE")
 
 	// Private route to get all inventory files (requires JWT)
+	router.HandleFunc("/api/inventoryfiles/{inventoryId}", inventoryFile.GetAllHandler).Methods("OPTIONS")
 	router.HandleFunc("/api/inventoryfiles/{inventoryId}", inventoryFile.GetAllHandler).Methods("GET")
 
 	// Private route to get a specific inventoryfile by ID (requires JWT)
+	router.HandleFunc("/api/inventoryfile/{inventoryId}/{id}", inventoryFile.GetByIdlHandler).Methods("OPTIONS")
 	router.HandleFunc("/api/inventoryfile/{inventoryId}/{id}", inventoryFile.GetByIdlHandler).Methods("GET")
 
 	// Private route to update a inventoryfile by ID (requires JWT)
+	router.HandleFunc("/api/inventoryfile/{inventoryId}/{id}", inventoryFile.UpdateHandler).Methods("OPTIONS")
 	router.HandleFunc("/api/inventoryfile/{inventoryId}/{id}", inventoryFile.UpdateHandler).Methods("PUT")
 
 	// Private route to delete a inventoryfile by ID (requires JWT)
+	router.HandleFunc("/api/inventoryfile/{inventoryId}/{id}", inventoryFile.DeleteHandler).Methods("OPTIONS")
 	router.HandleFunc("/api/inventoryfile/{inventoryId}/{id}", inventoryFile.DeleteHandler).Methods("DELETE")
 
 	// Private route to get all inventory products (requires JWT)
+	router.HandleFunc("/api/inventoryproducts/{inventoryId}", inventoryProduct.GetAllHandler).Methods("OPTIONS")
 	router.HandleFunc("/api/inventoryproducts/{inventoryId}", inventoryProduct.GetAllHandler).Methods("GET")
 
 	// Private route to get a specific inventoryproduct by ID (requires JWT)
+	router.HandleFunc("/api/inventoryproduct/{inventoryId}/{productId}", inventoryProduct.GetByIdlHandler).Methods("OPTIONS")
 	router.HandleFunc("/api/inventoryproduct/{inventoryId}/{productId}", inventoryProduct.GetByIdlHandler).Methods("GET")
 
 	// Private route to update a inventoryproduct by ID (requires JWT)
+	router.HandleFunc("/api/inventoryproduct/{inventoryId}/{productId}", inventoryProduct.UpdateHandler).Methods("OPTIONS")
 	router.HandleFunc("/api/inventoryproduct/{inventoryId}/{productId}", inventoryProduct.UpdateHandler).Methods("PUT")
 
 	// Private route to delete a inventoryproduct by ID (requires JWT)
+	router.HandleFunc("/api/inventoryproduct/{inventoryId}/{productId}", inventoryProduct.DeleteHandler).Methods("OPTIONS")
 	router.HandleFunc("/api/inventoryproduct/{inventoryId}/{productId}", inventoryProduct.DeleteHandler).Methods("DELETE")
 
 	port := 8181

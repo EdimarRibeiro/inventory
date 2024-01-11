@@ -32,50 +32,8 @@ export class FiltroDinamicoComponent {
 
   public dataSourceListaPesquisas: any = [];
   public tabelaLista = [
-    { table: "Cidade", id: "id" },
-    { table: "Cliente", id: "id" },
-    { table: "Contrato", id: "id" },
-    { table: "ContratoFrequencia", id: "id" },
-    { table: "ContratoParcela", id: "id" },
-    { table: "ContratoParcelaSituacao", id: "id" },
-    { table: "ContratoSituacao", id: "id" },
-    { table: "ContratoTipo", id: "id" },
-    { table: "Empresa", id: "id" },
-    { table: "EmpresaFilial", id: "id" },
-    { table: "EmpresaFilialConfiguracao", id: "id" },
-    { table: "Estado", id: "id" },
-    { table: "FormaPagamento", id: "id" },
-    { table: "FormaPagamentoCliente", id: "id" },
-    { table: "FormaPagamentoClienteParametro", id: "id" },
-    { table: "FormaPagamentoTipo", id: "id" },
-    { table: "Gateway", id: "id" },
-    { table: "GatewayConfiguracao", id: "id" },
-    { table: "GatewayParametro", id: "id" },
-    { table: "Mensagem", id: "id" },
-    { table: "MensagemParametro", id: "id" },
-    { table: "MensagemRastreio", id: "id" },
-    { table: "MensagemRastreioTipo", id: "id" },
-    { table: "MensagemSituacao", id: "id" },
-    { table: "ModeloMensagem", id: "id" },
-    { table: "Notificar", id: "id" },
-    { table: "NotificarContato", id: "id" },
-    { table: "NotificarContatoTipo", id: "id" },
-    { table: "NotificarSituacao", id: "id" },
-    { table: "Pais", id: "id" },
-    { table: "Pessoa", id: "id" },
-    { table: "PessoaContato", id: "id" },
-    { table: "PessoaContatoTipo", id: "id" },
-    { table: "PessoaEndereco", id: "id" },
-    { table: "PessoaEnderecoTipo", id: "id" },
-    { table: "PessoaTipo", id: "id" },
-    { table: "Provedor", id: "id" },
-    { table: "ProvedorConfiguracao", id: "id" },
-    { table: "ProvedorParametro", id: "id" },
-    { table: "ProvedorTipo", id: "id" },
-    { table: "SimNao", id: "id" },
-    { table: "Transacao", id: "id" },
-    { table: "TransacaoComprovante", id: "id" },
-    { table: "TransacaoSituacao", id: "id" },
+    { table: "Inventory", id: "id" },
+    { table: "Participant", id: "id" },
     { table: "User", id: "id" },
   ];
 
@@ -111,11 +69,11 @@ export class FiltroDinamicoComponent {
     });
   }
 
-  configuracaoPadrao(configuracao) {
-    this.configurarOperacaoAtivas(configuracao.tipoCampo);
-    this.formModel.controls["tipo"].setValue(configuracao.filtroPadrao.tipoCampo);
-    this.formModel.controls["campo"].setValue(configuracao?.dataSourceCampos.find((a) => a?.id === configuracao.filtroPadrao.campo));
-    this.formModel.controls["operacao"].setValue(this.dataSourceOperacao.find((a) => a.id === configuracao.filtroPadrao.operacao));
+  configuracaoPadrao(config) {
+    this.configurarOperacaoAtivas(config.tipoCampo);
+    this.formModel.controls["tipo"].setValue(config.filtroPadrao.tipoCampo);
+    this.formModel.controls["campo"].setValue(config?.dataSourceCampos.find((a) => a?.id === config.filtroPadrao.campo));
+    this.formModel.controls["operacao"].setValue(this.dataSourceOperacao.find((a) => a.id === config.filtroPadrao.operacao));
     this.formModel.controls["paginas"].setValue(this.service.events.rows);
   }
 

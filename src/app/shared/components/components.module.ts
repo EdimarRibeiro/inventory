@@ -80,8 +80,8 @@ const PRIMENG_MODULES = [
     DatePipe,
     UserStorageService,
     PermissoesStorageService,
-    FiltroDinamicoService,
     AccountService,
+    FiltroDinamicoService,
   ],
 })
 export class ComponentsModule { }

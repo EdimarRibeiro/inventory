@@ -9,7 +9,10 @@
     </div>
   </div>
 
-  <!--app-filtro-dinamico [(configuracao)]="configuracaoFiltro" (showChange)="showChange($event)"></app-filtro-dinamico-->
+  <!--
+  -->
+  <app-filtro-dinamico [(configuracao)]="configuracaoFiltro" (showChange)="showChange($event)"></app-filtro-dinamico>
+
   <p-table [pageLinks]="5" [value]="dataSource()" [(first)]="paginacaoConfig.numeroPagina" [paginator]="true" 
     responsiveLayout="stack" [resizableColumns]="true" [rows]="paginacaoConfig.numeroRows" [showCurrentPageReport]="true"
     currentPageReportTemplate="Exibindo {first} a {last} de {{paginacaoConfig.totalPagina}} itens" (onPage)="paginar($event)">
@@ -26,21 +29,19 @@
     <ng-template pTemplate="body" let-row let-i="rowIndex">
       <tr *ngIf="row">
         <td width="100vh">
-          <span class="p-column-title">Código</span> {{ row.id }}
+          <span class="p-column-title">Código</span> {{ row.Id }}
         </td>
         <td width="35%">
-          <span class="p-column-title">Name</span> {{ row.name }}
+          <span class="p-column-title">Name</span> {{ row.Name }}
         </td>
         <td width="30%">
-          <span class="p-column-title">Data</span>
-          {{ row.startDate }}
+          <span class="p-column-title">Data</span> {{ row.StartDate | date:'dd/MM/yyyy'}}
         </td>
         <td width="15%">
-          <span class="p-column-title">Processado</span> {{ row.processed === 1 ? 'Sim' : 'Não' }}
+          <span class="p-column-title">Processado</span> {{ row.Processed === 1 ? 'Sim' : 'Não' }}
         </td>
         <td width="10%">
-          <span class="p-column-title">Fechado</span>
-          {{ row.cloused === 1 ? 'Sim' : 'Não'}}
+          <span class="p-column-title">Fechado</span>  {{ row.Cloused === 1 ? 'Sim' : 'Não'}}
         </td>
         
         <td width="96vh">

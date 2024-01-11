@@ -29,7 +29,6 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { SkeletonModule } from 'primeng/skeleton';
-import { FiltroDinamicoService } from '@components/filtro-dinamico/filtro-dinamico.service';
 
 /////////////  Sistema //////////////
 import { InventoryService } from '@services/inventory/inventory.service';
@@ -43,7 +42,7 @@ const APP_COMPONENT = [
 ];
 
 const APP_MODULES = [
-    ComponentsModule
+   ComponentsModule,
 ];
 
 const PRIMENG_MODULES = [
@@ -78,16 +77,15 @@ const PRIMENG_MODULES = [
         FormsModule,
         ReactiveFormsModule,
         CommonModule,
-        InventoryRoutingModule,
+        DialogModule,
         APP_MODULES,
         PRIMENG_MODULES,
-        DialogModule
+        InventoryRoutingModule,
     ],
     providers: [
         MessageService,
         UploadFileService,
-        ConfirmationService,
-        FiltroDinamicoService,        
+        ConfirmationService,     
         InventoryService,
     ]
 })

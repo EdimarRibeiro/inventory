@@ -10,7 +10,7 @@ export class HttpJwtInterceptor implements HttpInterceptor {
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         const token: string = this.tokenStorageService.getAccessTokenSync();
-        if (token && request.url.toString().indexOf("login") == -1) {
+        if (token && request.url.toString().indexOf("login") === -1) {
            request = request.clone({
                 setHeaders: {
                     Authorization: `${token}`

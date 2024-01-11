@@ -103,9 +103,9 @@ export class InventoryComponent implements OnInit {
     return new Promise((resolve) => {
       this.service.getAllSearch(numeroGrid, pesquisa).subscribe((result) => {
         resolve({
-          quantidadePorPagina: result["records"]?.length ?? 0,
+          quantidadePorPagina: result["rows"]?.length ?? 0,
           dados: result["records"] ?? [],
-          quantidadeDadosTotais: result["totalRecords"] ?? 0,
+          quantidadeDadosTotais: result["pages"] ?? 0,
         });
       });
     });

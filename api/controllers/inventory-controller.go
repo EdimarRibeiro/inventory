@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	"github.com/EdimarRibeiro/inventory/api/common"
+	"github.com/EdimarRibeiro/inventory/api/models"
 	"github.com/EdimarRibeiro/inventory/internal/entities"
 	"github.com/EdimarRibeiro/inventory/internal/infrastructure"
 	entitiesinterface "github.com/EdimarRibeiro/inventory/internal/interfaces/entities"
@@ -67,12 +68,12 @@ func CreateInventoryProcessCalcController(inventory entitiesinterface.InventoryR
 	}
 }
 
-func (repo *inventoryController) GetAll(tenantId uint64) ([]entities.Inventory, error) {
-	inventorys, err := repo.inventory.Search("Inventory.TenantId=" + strconv.FormatUint(tenantId, 10))
+func (repo *inventoryController) GetAll(tenantId uint64, search string, page int64, rows int64) (*models.ResponsePage, error) {
+	inventorys, err := repo.inventory.Search("Inventory.TenantId=" + strconv.FormatUint(tenantId, 10) + search)
 	if err != nil {
 		return nil, err
 	}
-	return inventorys, nil
+	return common.PageResult(inventorys, page, rows), nil
 }
 
 func (repo *inventoryController) GetById(tenantId uint64, id uint64) (*entities.Inventory, error) {
@@ -116,7 +117,8 @@ func (repo *inventoryController) GetAllHandler(w http.ResponseWriter, r *http.Re
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
-	inventorys, err := repo.GetAll(tenantId)
+	search, page, rows := common.ExtractSearch(r)
+	inventorys, err := repo.GetAll(tenantId, search, page, rows)
 	if err != nil {
 		http.Error(w, "Error retrieving inventory "+err.Error(), http.StatusInternalServerError)
 		return
