@@ -3,7 +3,7 @@
     "version": 1,
     "newProjectRoot": "projects",
     "projects": {
-        "DebtConvert.web": {
+        "AppInventory": {
             "root": "",
             "sourceRoot": "src",
             "projectType": "application",
@@ -20,7 +20,7 @@
                         "allowedCommonJsDependencies": [
 
                         ],
-                        "outputPath": "dist/DebtConvert.web",
+                        "outputPath": "dist/AppInventory",
                         "index": "src/index.html",
                         "main": "src/main.ts",
                         "polyfills": "src/polyfills.ts",
@@ -92,11 +92,11 @@
                 "serve": {
                     "builder": "@angular-devkit/build-angular:dev-server",
                     "options": {
-                        "browserTarget": "DebtConvert.web:build"
+                        "browserTarget": "AppInventory:build"
                     },
                     "configurations": {
                         "production": {
-                            "browserTarget": "DebtConvert.web:build:production"
+                            "browserTarget": "AppInventory:build:production"
                         },
                         "development": {
                             "browserTarget": "babylon:build:development"
@@ -106,7 +106,7 @@
                 "extract-i18n": {
                     "builder": "@angular-devkit/build-angular:extract-i18n",
                     "options": {
-                        "browserTarget": "DebtConvert.web:build"
+                        "browserTarget": "AppInventory:build"
                     }
                 },
                 "test": {
@@ -132,18 +132,17 @@
                     "builder": "@angular-devkit/build-angular:protractor",
                     "options": {
                         "protractorConfig": "e2e/protractor.conf.js",
-                        "devServerTarget": "DebtConvert.web:serve"
+                        "devServerTarget": "AppInventory:serve"
                     },
                     "configurations": {
                         "production": {
-                            "devServerTarget": "DebtConvert.web:build:production"
+                            "devServerTarget": "AppInventory:build:production"
                         }
                     }
                 }
             }
         }
     },
-    "defaultProject": "default",
     "cli": {
         "analytics": false
     }
