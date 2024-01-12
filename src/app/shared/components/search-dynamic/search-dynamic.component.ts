@@ -3,14 +3,14 @@ import { Component, Output, Input, EventEmitter } from "@angular/core";
 import { FormBuilder, FormGroup, Validators, FormControl } from "@angular/forms";
 import { MessageService } from "primeng/api";
 import { NgxIndexedDB } from "ngx-indexed-db";
-import { FiltroDinamicoService } from "./filtro-dinamico.service";
+import { SearchDynamicService } from "./search-dynamic.service";
 
 @Component({
-  selector: "app-filtro-dinamico",
-  styleUrls: ["./filtro-dinamico.component.scss"],
-  templateUrl: "./filtro-dinamico.component.html",
+  selector: "app-search-dynamic",
+  styleUrls: ["./search-dynamic.component.scss"],
+  templateUrl: "./search-dynamic.component.html",
 })
-export class FiltroDinamicoComponent {
+export class SearchDynamicComponent {
   @Output() showChange = new EventEmitter();
   @Input() configuracao: any = {};
 
@@ -46,7 +46,7 @@ export class FiltroDinamicoComponent {
   constructor(
     private fb: FormBuilder,
     private messageService: MessageService,
-    private service: FiltroDinamicoService
+    private service: SearchDynamicService
   ) { }
 
   ngOnInit() {

@@ -21,7 +21,6 @@ import { CalendarModule } from "primeng/calendar";
 import { StepsModule } from "primeng/steps";
 import { AutoCompleteModule } from "primeng/autocomplete";
 import { ProgressSpinnerModule } from "primeng/progressspinner";
-import { QRCodeModule } from "angularx-qrcode";
 import { InputMaskModule } from "primeng/inputmask";
 import { BadgeModule } from "primeng/badge";
 
@@ -29,9 +28,9 @@ import { BadgeModule } from "primeng/badge";
 
 import { CarouselButtonComponent } from "@components/carousel-button/carousel-button.component";
 import { KeyboardComponent } from "@components/keyboard/keyboard.component";
-import { FiltroDinamicoComponent } from "./filtro-dinamico/filtro-dinamico.component";
+import { SearchDynamicComponent } from "./search-dynamic/search-dynamic.component";
 import { PermissoesStorageService } from "@auth/permissoes-storage.service";
-import { FiltroDinamicoService } from "./filtro-dinamico/filtro-dinamico.service";
+import { SearchDynamicService } from "./search-dynamic/search-dynamic.service";
 import { UserStorageService } from "@auth/user-storage.service";
 import { AccountService } from "@services/account/account.service";
 import { AlertComponent } from "./alert/alert.component";
@@ -40,11 +39,11 @@ const APP_COMPONENT = [
   CarouselButtonComponent,
   KeyboardComponent,
   AlertComponent,
-  FiltroDinamicoComponent,
   LoadingComponent,
+  SearchDynamicComponent,
 ];
 
-const APP_MODULES = [QRCodeModule];
+const APP_MODULES = [];
 
 const PRIMENG_MODULES = [
   ButtonModule,
@@ -81,7 +80,7 @@ const PRIMENG_MODULES = [
     UserStorageService,
     PermissoesStorageService,
     AccountService,
-    FiltroDinamicoService,
+    SearchDynamicService,
   ],
 })
 export class ComponentsModule { }

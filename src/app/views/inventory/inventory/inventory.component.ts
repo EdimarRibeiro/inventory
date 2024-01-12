@@ -4,7 +4,7 @@ import { BreadcrumbService } from "@services/layout/breadcrumb/breadcrumb.servic
 import { Router } from "@angular/router";
 import { FormGroup, FormBuilder } from "@angular/forms";
 import { ConfirmationService, MessageService } from "primeng/api";
-import { FiltroDinamicoService } from "@components/filtro-dinamico/filtro-dinamico.service";
+import { SearchDynamicService } from "@components/search-dynamic/search-dynamic.service";
 
 @Component({
   templateUrl: "./inventory.component.html",
@@ -33,7 +33,7 @@ export class InventoryComponent implements OnInit {
     private fb: FormBuilder,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
-    private serviceFiltroDinamico: FiltroDinamicoService,
+    private searchDynamicDinamico: SearchDynamicService,
   ) {
     this.breadcrumbService.setItems([
       { label: "Inventários", routerLink: "/cadastro" },
@@ -82,12 +82,12 @@ export class InventoryComponent implements OnInit {
   ///////////////////////////////// Paginação //////////////////////////////////////
 
   iniciarConfiguracaoFiltro() {
-    this.serviceFiltroDinamico.loadGrid = (numeroGrid: any, pesquisa?: any) =>
+    this.searchDynamicDinamico.loadGrid = (numeroGrid: any, pesquisa?: any) =>
       this.loadGrid(numeroGrid, pesquisa);
-    this.serviceFiltroDinamico.paginacaoConfig = this.paginacaoConfig;
-    this.paginar = (evento, search) => this.serviceFiltroDinamico.paginar(evento, search);
+    this.searchDynamicDinamico.paginacaoConfig = this.paginacaoConfig;
+    this.paginar = (evento, search) => this.searchDynamicDinamico.paginar(evento, search);
     setTimeout(() => {
-      this.serviceFiltroDinamico.filtrar();
+      this.searchDynamicDinamico.filtrar();
     }, 600);
   }
 
@@ -96,7 +96,7 @@ export class InventoryComponent implements OnInit {
   }
 
   dataSource() {
-    return this.serviceFiltroDinamico?.dataSource;
+    return this.searchDynamicDinamico?.dataSource;
   }
 
   loadGrid(numeroGrid, pesquisa?) {

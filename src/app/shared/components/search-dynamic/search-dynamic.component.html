@@ -1,6 +1,6 @@
 <div [formGroup]="formModel" class="p-fluid p-formgrid p-grid" style="margin-top: -25px;">
     <div class="p-field p-col-12 p-md-2">
-        <label>Campo do Filtro</label>
+        <label>Filtro</label>
         <p-dropdown (onChange)="campoSelecionado($event.value)" formControlName="campo" [options]="configuracao?.dataSourceCampos" placeholder="Campo do Filtro" optionLabel="descricao" [showClear]="true"></p-dropdown>
         <small class="p-invalid" *ngIf="(dataSourceListaPesquisas.length == 0) && submitted && !formModel.controls['campo'].valid">Este campo é obrigatório.</small>
     </div>
