@@ -1,4 +1,4 @@
-<div [formGroup]="formModel" class="p-fluid p-formgrid p-grid" style="margin-top: -25px;">
+<div [formGroup]="formModel" class="p-fluid p-formgrid p-grid p-col-12" style="margin-top: -25px;">
     <div class="p-field p-col-12 p-md-2">
         <label>Filtro</label>
         <p-dropdown (onChange)="campoSelecionado($event.value)" formControlName="campo" [options]="configuracao?.dataSourceCampos" placeholder="Campo do Filtro" optionLabel="descricao" [showClear]="true"></p-dropdown>
@@ -47,13 +47,15 @@
     </div>
     <div class="p-field p-col-12 p-md-1">
         <label>Nº Pags</label>
-        <p-inputNumber formControlName="paginas" [min]="20" [max]="500" (ngModelChange)="UpdatePage($event)"></p-inputNumber>
+        <p-inputNumber formControlName="paginas" [min]="0" [max]="500" (ngModelChange)="UpdatePage($event)"></p-inputNumber>
     </div>  
     <p-button (click)="adicionarListaPesquisa()" icon="pi pi-plus"></p-button>
     <p-button (click)="filtrar(formModel.value)" label="Filtrar" icon="pi pi-filter" styleClass="p-button-warning"></p-button>
     <p-button (click)="limparFiltro()" icon="pi pi-times" styleClass="p-button-danger"></p-button>
     <ng-container *ngFor="let item of dataSourceListaPesquisas">
+        <!--
         <p-chip [styleClass]="'custom-chip ' + item.tipo" (onRemove)="removerDaListaPesquisa(item)" label="{{item.descricao}}" [removable]="item.tipo === 'operacao'"></p-chip>
+        -->
     </ng-container>
 </div>
 

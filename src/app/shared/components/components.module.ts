@@ -28,9 +28,9 @@ import { BadgeModule } from "primeng/badge";
 
 import { CarouselButtonComponent } from "@components/carousel-button/carousel-button.component";
 import { KeyboardComponent } from "@components/keyboard/keyboard.component";
-import { SearchDynamicComponent } from "./search-dynamic/search-dynamic.component";
+import { SearchDynamicComponent } from "../../views/inventory/search-dynamic/search-dynamic.component";
 import { PermissoesStorageService } from "@auth/permissoes-storage.service";
-import { SearchDynamicService } from "./search-dynamic/search-dynamic.service";
+import { SearchDynamicService } from "../../views/inventory/search-dynamic/search-dynamic.service";
 import { UserStorageService } from "@auth/user-storage.service";
 import { AccountService } from "@services/account/account.service";
 import { AlertComponent } from "./alert/alert.component";
@@ -40,7 +40,7 @@ const APP_COMPONENT = [
   KeyboardComponent,
   AlertComponent,
   LoadingComponent,
-  SearchDynamicComponent,
+  //SearchDynamicComponent,
 ];
 
 const APP_MODULES = [];
@@ -80,7 +80,7 @@ const PRIMENG_MODULES = [
     UserStorageService,
     PermissoesStorageService,
     AccountService,
-    SearchDynamicService,
+   // SearchDynamicService,
   ],
 })
 export class ComponentsModule { }

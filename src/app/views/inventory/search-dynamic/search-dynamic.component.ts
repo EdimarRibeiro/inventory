@@ -193,7 +193,7 @@ export class SearchDynamicComponent {
   }
 
   adicionarDataSourcePesquisa(idExcluir) {
-    (this.formModel.value.tipo === "data" || this.formModel.value.tipo === "dateTime")
+    (this.formModel.value.tipo === "date" || this.formModel.value.tipo === "dateTime")
       ? this.adicionarDataSourcePesquisaData(idExcluir)
       : this.adicionarDataSourcePesquisaValor(idExcluir);
   }

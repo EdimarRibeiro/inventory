@@ -4,7 +4,7 @@ import { BreadcrumbService } from "@services/layout/breadcrumb/breadcrumb.servic
 import { Router } from "@angular/router";
 import { FormGroup, FormBuilder } from "@angular/forms";
 import { ConfirmationService, MessageService } from "primeng/api";
-import { SearchDynamicService } from "@components/search-dynamic/search-dynamic.service";
+import { SearchDynamicService } from "../search-dynamic/search-dynamic.service";
 
 @Component({
   templateUrl: "./inventory.component.html",
@@ -18,7 +18,7 @@ export class InventoryComponent implements OnInit {
   };
   public configuracaoFiltro: any = {
     tabela: "Inventory",
-    filtroPadrao: { tipoCampo: "Date", campo: "Inventory.StartDate", operacao: "in" },
+    filtroPadrao: { tipoCampo: "date", campo: "Inventory.StartDate", operacao: "in" },
     dataSourceCampos: [
       { id: "Inventory.StartDate", descricao: "Data", tipo: "Date" },
       { id: "Inventory.Name", descricao: "nome", tipo: "string" },
@@ -105,7 +105,7 @@ export class InventoryComponent implements OnInit {
         resolve({
           quantidadePorPagina: result["rows"]?.length ?? 0,
           dados: result["records"] ?? [],
-          quantidadeDadosTotais: result["pages"] ?? 0,
+          quantidadeDadosTotais: result["totalRows"] ?? 0,
         });
       });
     });

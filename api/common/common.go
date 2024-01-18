@@ -66,9 +66,10 @@ func PageResult[T any](dataSet []T, page int64, rows int64) *models.ResponsePage
 	pageData := dataSet[startIndex:endIndex]
 
 	return &models.ResponsePage{
-		Page:    page,
-		Rows:    rows,
-		Records: pageData,
-		Pages:   pages,
+		Page:      page,
+		Rows:      rows,
+		TotalRows: totalRecords,
+		Records:   pageData,
+		Pages:     pages,
 	}
 }

@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NO_ERRORS_SCHEMA, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ComponentsModule } from '@components/components.module';
@@ -35,14 +35,17 @@ import { InventoryService } from '@services/inventory/inventory.service';
 import { InventoryEditComponent } from './inventory/inventory-edit/inventory-edit.component';
 import { InventoryComponent } from './inventory/inventory.component';
 import { InventoryRoutingModule } from './inventory-routing.module';
+import { SearchDynamicService } from './search-dynamic/search-dynamic.service';
+import { SearchDynamicComponent } from './search-dynamic/search-dynamic.component';
 
 const APP_COMPONENT = [
     InventoryComponent,
     InventoryEditComponent,
+    SearchDynamicComponent,
 ];
 
 const APP_MODULES = [
-   ComponentsModule,
+   ComponentsModule
 ];
 
 const PRIMENG_MODULES = [
@@ -70,16 +73,17 @@ const PRIMENG_MODULES = [
 ];
 
 @NgModule({
+    //schemas: [NO_ERRORS_SCHEMA],
     declarations: [
-        APP_COMPONENT
+        ...APP_COMPONENT
     ],
     imports: [
         FormsModule,
         ReactiveFormsModule,
         CommonModule,
         DialogModule,
-        APP_MODULES,
-        PRIMENG_MODULES,
+        ...APP_MODULES,
+        ...PRIMENG_MODULES,
         InventoryRoutingModule,
     ],
     providers: [
@@ -87,6 +91,7 @@ const PRIMENG_MODULES = [
         UploadFileService,
         ConfirmationService,     
         InventoryService,
+        SearchDynamicService,
     ]
 })
 export class InventoryModule {

@@ -69,7 +69,11 @@ func CreateInventoryProcessCalcController(inventory entitiesinterface.InventoryR
 }
 
 func (repo *inventoryController) GetAll(tenantId uint64, search string, page int64, rows int64) (*models.ResponsePage, error) {
-	inventorys, err := repo.inventory.Search("Inventory.TenantId=" + strconv.FormatUint(tenantId, 10) + search)
+	condition := " and " + search
+	if search == "" {
+		condition = ""
+	}
+	inventorys, err := repo.inventory.Search("Inventory.TenantId=" + strconv.FormatUint(tenantId, 10) + condition)
 	if err != nil {
 		return nil, err
 	}
