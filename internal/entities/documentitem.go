@@ -8,49 +8,49 @@ import (
 
 /*C170*/
 type DocumentItem struct {
-	DocumentId         uint64   `gorm:"primaryKey"`
-	Document           Document `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;" json:"-"`
-	Sequency           string   `gorm:"primaryKey;size:3"`
-	InventoryId        uint64
+	DocumentId         uint64    `gorm:"primaryKey" json:"documentId"`
+	Document           Document  `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;" json:"-"`
+	Sequency           string    `gorm:"primaryKey;size:3" json:"sequency"`
+	InventoryId        uint64    `json:"inventoryId"`
 	Inventory          Inventory `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;" json:"-"`
-	ProductId          uint64
-	Product            Product `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;"`
-	Complememt         string  `gorm:"size:255"`
-	Quantity           float64 `gorm:"type:decimal (18,5)"`
-	UnitId             string  `gorm:"size:6"`
-	Unit               Unit    `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;" json:"-"`
-	Value              float64 `gorm:"type:decimal (18,2)"`
-	Discount           float64 `gorm:"type:decimal (12,2)"`
-	MovimentType       string  `gorm:"size:1"`
-	CstCode            string  `gorm:"size:3"`
-	CfopCode           string  `gorm:"size:4"`
-	OperationNatureId  string  `gorm:"size:10"`
-	BaseIcms           float64 `gorm:"type:decimal (18,2)"`
-	AliquotIcms        float64 `gorm:"type:decimal (12,2)"`
-	ValueIcms          float64 `gorm:"type:decimal (18,2)"`
-	BaseIcmsSt         float64 `gorm:"type:decimal (18,2)"`
-	ValueIcmsSt        float64 `gorm:"type:decimal (12,2)"`
-	AliquotIcmsSt      float64 `gorm:"type:decimal (12,2)"`
-	ApurationIpiCode   string  `gorm:"size:1"`
-	CstIpiCode         string  `gorm:"size:2"`
-	LegalIpiCode       string  `gorm:"size:3"`
-	BaseIpi            float64 `gorm:"type:decimal (18,2)"`
-	AliquotIpi         float64 `gorm:"type:decimal (12,2)"`
-	ValueIpi           float64 `gorm:"type:decimal (12,2)"`
-	CstPisCode         string  `gorm:"size:2"`
-	BasePis            float64 `gorm:"type:decimal (18,2)"`
-	AliquotPis         float64 `gorm:"type:decimal (12,4)"`
-	QuantityBasePis    float64 `gorm:"type:decimal (12,3)"`
-	ValueAliquotPis    float64 `gorm:"type:decimal (12,4)"`
-	ValuePis           float64 `gorm:"type:decimal (12,2)"`
-	CstCofinsCode      string  `gorm:"size:2"`
-	BaseCofins         float64 `gorm:"type:decimal (18,2)"`
-	AliquotCofins      float64 `gorm:"type:decimal (12,4)"`
-	QuantityBaseCofins float64 `gorm:"type:decimal (12,3)"`
-	ValueAliquotCofins float64 `gorm:"type:decimal (12,4)"`
-	ValueCofins        float64 `gorm:"type:decimal (12,2)"`
-	AccountingCode     string
-	RebateValue        float64 `gorm:"type:decimal (12,2)"`
+	ProductId          uint64    `gorm:"primaryKey;size:3" json:"productId"`
+	Product            Product   `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;" json:"product"`
+	Complememt         string    `gorm:"size:255" json:"complememt"`
+	Quantity           float64   `gorm:"type:decimal (18,5)" json:"quantity"`
+	UnitId             string    `gorm:"size:6" json:"unitId"`
+	Unit               Unit      `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;" json:"-"`
+	Value              float64   `gorm:"type:decimal (18,2)" json:"value"`
+	Discount           float64   `gorm:"type:decimal (12,2)" json:"discount"`
+	MovimentType       string    `gorm:"size:1" json:"movimentType"`
+	CstCode            string    `gorm:"size:3" json:"cstCode"`
+	CfopCode           string    `gorm:"size:4" json:"cfopCode"`
+	OperationNatureId  string    `gorm:"size:10" json:"operationNatureId"`
+	BaseIcms           float64   `gorm:"type:decimal (18,2)" json:"baseIcms"`
+	AliquotIcms        float64   `gorm:"type:decimal (12,2)" json:"aliquotIcms"`
+	ValueIcms          float64   `gorm:"type:decimal (18,2)" json:"valueIcms"`
+	BaseIcmsSt         float64   `gorm:"type:decimal (18,2)" json:"baseIcmsSt"`
+	ValueIcmsSt        float64   `gorm:"type:decimal (12,2)" json:"valueIcmsSt"`
+	AliquotIcmsSt      float64   `gorm:"type:decimal (12,2)" json:"aliquotIcmsSt"`
+	ApurationIpiCode   string    `gorm:"size:1" json:"apurationIpiCode"`
+	CstIpiCode         string    `gorm:"size:2" json:"cstIpiCode"`
+	LegalIpiCode       string    `gorm:"size:3" json:"legalIpiCode"`
+	BaseIpi            float64   `gorm:"type:decimal (18,2)" json:"baseIpi"`
+	AliquotIpi         float64   `gorm:"type:decimal (12,2)" json:"aliquotIpi"`
+	ValueIpi           float64   `gorm:"type:decimal (12,2)" json:"valueIpi"`
+	CstPisCode         string    `gorm:"size:2" json:"cstPisCode"`
+	BasePis            float64   `gorm:"type:decimal (18,2)" json:"basePis"`
+	AliquotPis         float64   `gorm:"type:decimal (12,4)" json:"aliquotPis"`
+	QuantityBasePis    float64   `gorm:"type:decimal (12,3)" json:"quantityBasePis"`
+	ValueAliquotPis    float64   `gorm:"type:decimal (12,4)" json:"valueAliquotPis"`
+	ValuePis           float64   `gorm:"type:decimal (12,2)" json:"valuePis"`
+	CstCofinsCode      string    `gorm:"size:2" json:"cstCofinsCode"`
+	BaseCofins         float64   `gorm:"type:decimal (18,2)" json:"baseCofins"`
+	AliquotCofins      float64   `gorm:"type:decimal (12,4)" json:"aliquotCofins"`
+	QuantityBaseCofins float64   `gorm:"type:decimal (12,3)" json:"quantityBaseCofins"`
+	ValueAliquotCofins float64   `gorm:"type:decimal (12,4)" json:"valueAliquotCofins"`
+	ValueCofins        float64   `gorm:"type:decimal (12,2)" json:"valueCofins"`
+	AccountingCode     string    `json:"accountingCode"`
+	RebateValue        float64   `gorm:"type:decimal (12,2)" json:"rebateValue"`
 }
 
 func (c *DocumentItem) Validate() error {

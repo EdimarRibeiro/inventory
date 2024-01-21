@@ -6,6 +6,6 @@ export interface InventoryFile {
     fileName: string;
     fileType: string;   
     processed: number;    
-    inventory: Inventory;
+    inventory?: Inventory;
 }
  

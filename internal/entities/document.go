@@ -9,42 +9,42 @@ import (
 
 /*C100*/
 type Document struct {
-	Id            uint64    `gorm:"primaryKey;autoIncrement:true"`
-	InventoryId   uint64    `gorm:"index:idx_Inventory"`
-	Inventory     Inventory `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;" json:"-"`
-	ParticipantId uint64
-	Participant   Participant `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;"`
-	OperationId   string      `gorm:"size:1"`
-	EmitentTypeId string      `gorm:"size:1"`
-	ModelId       string      `gorm:"size:2"`
-	StatusId      string      `gorm:"size:2"`
-	Serie         string      `gorm:"size:3"`
-	Number        string      `gorm:"size:9"`
-	DocumentKey   string      `gorm:"size:44"`
-	EmitentDate   time.Time   `gorm:"datetime"`
-	ExitDate      time.Time   `gorm:"datetime"`
-	DocumentValue float64     `gorm:"type:decimal (18,2)"`
-	PayTypeId     string      `gorm:"size:1"`
-	Discount      float64     `gorm:"type:decimal (12,2)"`
-	Reduction     float64     `gorm:"type:decimal (12,2)"`
-	ProductValue  float64     `gorm:"type:decimal (18,2)"`
-	FreightType   string      `gorm:"size:1"`
-	FreightValue  float64     `gorm:"type:decimal (12,2)"`
-	SafeValue     float64     `gorm:"type:decimal (12,2)"`
-	ExpenseValue  float64     `gorm:"type:decimal (12,2)"`
-	BaseIcms      float64     `gorm:"type:decimal (18,2)"`
-	ValueIcms     float64     `gorm:"type:decimal (18,2)"`
-	BaseIcmsSt    float64     `gorm:"type:decimal (18,2)"`
-	ValueIcmsSt   float64     `gorm:"type:decimal (18,2)"`
-	ValueIpi      float64     `gorm:"type:decimal (18,2)"`
-	ValuePis      float64     `gorm:"type:decimal (18,2)"`
-	ValueCofins   float64     `gorm:"type:decimal (18,2)"`
-	ValuePisSt    float64     `gorm:"type:decimal (18,2)"`
-	ValueCofinsSt float64     `gorm:"type:decimal (18,2)"`
-	Origined      string      `gorm:"size:3"`
-	Processed     bool
-	Imported      bool
-	Cloused       bool
+	Id            uint64      `gorm:"primaryKey;autoIncrement:true"  json:"id"`
+	InventoryId   uint64      `gorm:"index:idx_Inventory"  json:"inventoryId"`
+	Inventory     Inventory   `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;" json:"-"`
+	ParticipantId uint64      `json:"participantId"`
+	Participant   Participant `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;" json:"participant"`
+	OperationId   string      `gorm:"size:1" json:"operationId"`
+	EmitentTypeId string      `gorm:"size:1" json:"emitentTypeId"`
+	ModelId       string      `gorm:"size:2" json:"modelId"`
+	StatusId      string      `gorm:"size:2" json:"statusId"`
+	Serie         string      `gorm:"size:3" json:"serie"`
+	Number        string      `gorm:"size:9" json:"number"`
+	DocumentKey   string      `gorm:"size:44" json:"documentKey"`
+	EmitentDate   time.Time   `gorm:"datetime" json:"emitentDate"`
+	ExitDate      time.Time   `gorm:"datetime" json:"exitDate"`
+	DocumentValue float64     `gorm:"type:decimal (18,2)" json:"documentValue"`
+	PayTypeId     string      `gorm:"size:1" json:"payTypeId"`
+	Discount      float64     `gorm:"type:decimal (12,2)" json:"discount"`
+	Reduction     float64     `gorm:"type:decimal (12,2)" json:"reduction"`
+	ProductValue  float64     `gorm:"type:decimal (18,2)" json:"productValue"`
+	FreightType   string      `gorm:"size:1" json:"freightType"`
+	FreightValue  float64     `gorm:"type:decimal (12,2)" json:"freightValue"`
+	SafeValue     float64     `gorm:"type:decimal (12,2)" json:"safeValue"`
+	ExpenseValue  float64     `gorm:"type:decimal (12,2)" json:"expenseValue"`
+	BaseIcms      float64     `gorm:"type:decimal (18,2)" json:"baseIcms"`
+	ValueIcms     float64     `gorm:"type:decimal (18,2)" json:"valueIcms"`
+	BaseIcmsSt    float64     `gorm:"type:decimal (18,2)" json:"baseIcmsSt"`
+	ValueIcmsSt   float64     `gorm:"type:decimal (18,2)" json:"valueIcmsSt"`
+	ValueIpi      float64     `gorm:"type:decimal (18,2)" json:"valueIpi"`
+	ValuePis      float64     `gorm:"type:decimal (18,2)" json:"valuePis"`
+	ValueCofins   float64     `gorm:"type:decimal (18,2)" json:"valueCofins"`
+	ValuePisSt    float64     `gorm:"type:decimal (18,2)" json:"valuePisSt"`
+	ValueCofinsSt float64     `gorm:"type:decimal (18,2)" json:"valueCofinsSt"`
+	Origined      string      `gorm:"size:3" json:"origined"`
+	Processed     bool        `json:"processed"`
+	Imported      bool        `json:"imported"`
+	Cloused       bool        `json:"cloused"`
 }
 
 func (d *Document) Validate() error {

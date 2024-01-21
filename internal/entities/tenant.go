@@ -6,12 +6,12 @@ import (
 )
 
 type Tenant struct {
-	Id        uint64    `gorm:"primaryKey;autoIncrement:true"`
-	Name      string    `gorm:"size:150"`
-	Document  string    `gorm:"size:14"`
-	StartDate time.Time `gorm:"datetime"`
-	PersonId  uint64    `gorm:"default:null"`
-	Canceled  bool
+	Id        uint64    `gorm:"primaryKey;autoIncrement:true" json:"id"`
+	Name      string    `gorm:"size:150" json:"name"`
+	Document  string    `gorm:"size:14" json:"document"`
+	StartDate time.Time `gorm:"datetime" json:"startDate"`
+	PersonId  uint64    `gorm:"default:null" json:"personId"`
+	Canceled  bool      `json:"canceled"`
 }
 
 func (c *Tenant) Validate() error {

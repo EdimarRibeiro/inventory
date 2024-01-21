@@ -5,12 +5,12 @@ import (
 )
 
 type InventoryFile struct {
-	Id          uint64 `gorm:"primaryKey"`
-	InventoryId uint64
+	Id          uint64    `gorm:"primaryKey" json:"id"`
+	InventoryId uint64    `json:"inventoryId"`
 	Inventory   Inventory `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;" json:"-"`
-	FileName    string    `gorm:"size:500"`
-	FileType    string    `gorm:"size:3"`
-	Processed   bool
+	FileName    string    `gorm:"size:500" json:"fileName"`
+	FileType    string    `gorm:"size:3" json:"fileType"`
+	Processed   bool      `json:"processed"`
 }
 
 func (c *InventoryFile) Validate() error {

@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { InventoryService } from "@services/inventory/inventory.service";
 import { BreadcrumbService } from "@services/layout/breadcrumb/breadcrumb.service";
-import { Router } from "@angular/router";
+import { NavigationExtras, Router } from "@angular/router";
 import { FormGroup, FormBuilder } from "@angular/forms";
 import { ConfirmationService, MessageService } from "primeng/api";
 import { SearchDynamicService } from "../search-dynamic/search-dynamic.service";
@@ -38,7 +38,6 @@ export class InventoryComponent implements OnInit {
     this.breadcrumbService.setItems([
       { label: "Inventários", routerLink: "/cadastro" },
     ]);
-    this.router.paramsInheritanceStrategy = "emptyOnly";
   }
 
   ngOnInit(): void {
@@ -47,8 +46,10 @@ export class InventoryComponent implements OnInit {
 
   edit(row) {
     if (row) {
-      this.router.paramsInheritanceStrategy = row.pessoaId;
-      this.router.navigate(["/inventory/edit"], row.pessoaId);
+      const navigationExtras: NavigationExtras = {
+        state: { customData: { inventoryId: row.id } }
+      };
+      this.router.navigate(["/inventory/inventory/edit"], navigationExtras);
     }
   }
 
@@ -60,7 +61,7 @@ export class InventoryComponent implements OnInit {
 
       accept: () => {
         this.service.delete(row).subscribe(() => {
-          this.messageService.add({ key: "001", severity: "success", summary: "Excluido!", detail: row.pessoa.nome });
+          this.messageService.add({ key: "001", severity: "success", summary: "Excluido!", detail: row.name });
           this.iniciarConfiguracaoFiltro();
         },
           (err) => {

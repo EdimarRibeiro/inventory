@@ -1,0 +1,50 @@
+<p-dialog [breakpoints]="{'960px': '75vw', '640px': '100vw'}" [(visible)]="show" [draggable]="false" [modal]="true"
+  (onHide)="back()" [style]="{width: '70vw', minWidth: '60vw'}" [closable]="false">
+  <button style="float: right;" pButton type="button" label="Voltar" (click)="back()" icon="pi pi-arrow-left"></button>
+  <h4 style="text-align: center;font-family: auto;">Arquivo {{data.title}}</h4>
+  <form [formGroup]="formModel">
+    <div class="p-fluid">
+      <div class="p-field p-grid">
+        <label class="p-col-12 p-mb-2 p-md-1 p-mb-md-0">Arquivo</label>
+        <div class="p-col-12 p-md-9">
+          <p-fileUpload chooseLabel="Abrir" uploadLabel="Carregar" cancelLabel="Excluir" name="fileName"
+            customUpload="true" (onClear)="onClear()" (uploadHandler)="onUpload($event)">
+          </p-fileUpload>
+
+          <small class="p-invalid" *ngIf="submitted && !formModel.controls['fileName'].valid">Este campo é
+            obrigatório.</small>
+        </div>
+      </div>
+      <div class="p-field p-grid">
+        <label class="p-col-12 p-mb-2 p-md-1 p-mb-md-0">Tipo de Arquivo</label>
+        <div class="p-col-12 p-md-10">
+          <p-dropdown appendTo="body" [options]="dataSourceTypeFile" [showClear]="true" formControlName="fileType"
+            optionLabel="name" [filter]="true" filterBy="name" placeholder="Tipo do arquivo"></p-dropdown>
+          <small class="p-invalid" *ngIf="submitted && !formModel.controls['fileType'].valid">Este campo é
+            obrigatório.</small>
+        </div>
+      </div>
+      <div class="p-field p-grid">
+        <label class="p-col-12 p-mb-2 p-md-1 p-mb-md-0">Processado?</label>
+        <div class="p-col-12 p-md-10">
+          <p-radioButton formControlName="processed" name="processed" value="A" label="Sim"
+            inputId="processedSim"></p-radioButton>
+          <p-radioButton formControlName="processed" [style]="{'margin-left': '30px'}" name="processed" value="I"
+            label="Não" inputId="processedNao"></p-radioButton>
+          <br>
+          <small class="p-invalid" *ngIf="submitted && !formModel.controls['processed'].valid">Este campo é
+            obrigatório.</small>
+        </div>
+      </div>
+      <div class="p-fluid p-formgrid p-grid">
+        <div class="p-field p-col-12 p-md-3"></div>
+        <div class="p-field p-col-12 p-md-6">
+          <p-button *ngIf="!salvando" (click)="save()" icon="pi pi-save" iconPos="right" label="Salvar e Continuar"
+            styleClass="p-button-rounded"></p-button>
+          <p-button *ngIf="salvando" icon="pi pi-spin pi-spinner" iconPos="right" label="Salvar e Continuar"
+            styleClass="p-button-rounded"></p-button>
+        </div>
+      </div>
+    </div>
+  </form>
+</p-dialog>

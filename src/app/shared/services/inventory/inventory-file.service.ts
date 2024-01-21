@@ -9,20 +9,21 @@ export class InventoryFileService {
 
   private URL = environment.baseServer + 'inventoryfile';
   private URLs = environment.baseServer + 'inventoryfiles';
+  private URLUp = environment.baseServer + 'upload';
 
   constructor(private http: HttpClient) {
   }
 
-  get(): Observable<InventoryFile[]> {
-    return this.http.get<InventoryFile[]>(this.URLs);
+  get(id): Observable<InventoryFile[]> {
+    return this.http.get<InventoryFile[]>(this.URLs + '/' + id);
   }
 
-  getSearch(page: number, search: string): Observable<InventoryFile[]> {
-    return this.http.get<InventoryFile[]>(`${this.URLs}/?page=${page}&&search=${search}`);
+  getAllSearch(inventoryId: number, page: number, search: string): Observable<InventoryFile[]> {
+    return this.http.get<InventoryFile[]>(`${this.URLs}/${inventoryId}/?page=${page}&&search=${search}`);
   }
 
-  getId(id): Observable<InventoryFile> {
-    return this.http.get<InventoryFile>(this.URL + '/' + id);
+  getId(inventoryId, id): Observable<InventoryFile> {
+    return this.http.get<InventoryFile>(this.URL + '/' + inventoryId + '/' + id);
   }
 
   save(inventoryFile) {
@@ -35,5 +36,9 @@ export class InventoryFileService {
 
   delete(inventoryFile) {
     return this.http.delete(this.URL + '/' + inventoryFile.id, inventoryFile);
+  }
+
+  setFileOcean(file){
+    return this.http.post(this.URLUp, file);
   }
 }

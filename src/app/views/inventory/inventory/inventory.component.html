@@ -3,7 +3,7 @@
     <div class="p-field p-grid">
       <div class="p-col-12 p-md-10"></div>
       <label class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">
-        <button [routerLink]="['/inventory/edit']" routerLinkActive="router-link-active"
+        <button [routerLink]="['/inventory/inventory/edit']" routerLinkActive="router-link-active"
           style="float: right; margin-right: 2px" pButton type="button" icon="pi pi-plus" label="Novo"></button>
       </label>
     </div>
@@ -29,19 +29,19 @@
     <ng-template pTemplate="body" let-row let-i="rowIndex">
       <tr *ngIf="row">
         <td width="100vh">
-          <span class="p-column-title">Código</span> {{ row.Id }}
+          <span class="p-column-title">Código</span> {{ row.id }}
         </td>
         <td width="35%">
-          <span class="p-column-title">Name</span> {{ row.Name }}
+          <span class="p-column-title">Name</span> {{ row.name }}
         </td>
         <td width="30%">
-          <span class="p-column-title">Data</span> {{ row.StartDate | date:'dd/MM/yyyy'}}
+          <span class="p-column-title">Data</span> {{ row.startDate | date:'dd/MM/yyyy'}}
         </td>
         <td width="15%">
-          <span class="p-column-title">Processado</span> {{ row.Processed === 1 ? 'Sim' : 'Não' }}
+          <span class="p-column-title">Processado</span> {{ row.processed === 1 ? 'Sim' : 'Não' }}
         </td>
         <td width="10%">
-          <span class="p-column-title">Fechado</span> {{ row.Cloused === 1 ? 'Sim' : 'Não'}}
+          <span class="p-column-title">Fechado</span> {{ row.cloused === 1 ? 'Sim' : 'Não'}}
         </td>
 
         <td width="96vh">

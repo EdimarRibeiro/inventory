@@ -6,9 +6,9 @@ import (
 
 /**/
 type City struct {
-	Id          uint64 `gorm:"primaryKey;autoIncrement:true"`
-	Description string `gorm:"size:150"`
-	CityCode    string `gorm:"size:7;index:idx_CityCode,unique"`
+	Id          uint64 `gorm:"primaryKey;autoIncrement:true"  json:"id"`
+	Description string `gorm:"size:150" json:"description"`
+	CityCode    string `gorm:"size:7;index:idx_CityCode,unique" json:"cityCode"`
 }
 
 func (c *City) Validate() error {

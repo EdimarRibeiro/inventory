@@ -8,21 +8,21 @@ import (
 
 /*0150*/
 type Participant struct {
-	Id           uint64 `gorm:"primaryKey;autoIncrement:true"`
-	TenantId     uint64
+	Id           uint64 `gorm:"primaryKey;autoIncrement:true" json:"id"`
+	TenantId     uint64 `json:"tenantId"`
 	Tenant       Tenant `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;" json:"-"`
-	OriginCode   string `gorm:"size:60"`
-	Name         string `gorm:"size:100"`
-	Document     string `gorm:"size:14"`
-	DocumentCpf  string `gorm:"size:11"`
-	Registration string `gorm:"size:14"`
-	CountryCode  string `gorm:"size:5"`
-	CityCode     string `gorm:"size:7"`
-	Suframa      string `gorm:"size:9"`
-	Street       string `gorm:"size:200"`
-	Number       string `gorm:"size:10"`
-	Complememt   string `gorm:"size:60"`
-	Neighborhood string `gorm:"size:60"`
+	OriginCode   string `gorm:"size:60" json:"originCode"`
+	Name         string `gorm:"size:100" json:"name"`
+	Document     string `gorm:"size:14" json:"document"`
+	DocumentCpf  string `gorm:"size:11" json:"documentCpf"`
+	Registration string `gorm:"size:14" json:"registration"`
+	CountryCode  string `gorm:"size:5" json:"countryCode"`
+	CityCode     string `gorm:"size:7" json:"cityCode"`
+	Suframa      string `gorm:"size:9" json:"suframa"`
+	Street       string `gorm:"size:200" json:"street"`
+	Number       string `gorm:"size:10" json:"number"`
+	Complememt   string `gorm:"size:60" json:"complememt"`
+	Neighborhood string `gorm:"size:60" json:"neighborhood"`
 }
 
 func (c *Participant) Validate() error {

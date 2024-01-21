@@ -8,8 +8,9 @@ import { InventoryService } from '@services/inventory/inventory.service';
 import { InventoryFile } from '@interfaces/inventory/inventory-file';
 import { InventoryProduct } from '@interfaces/inventory/inventory-product';
 import { Inventory } from '@interfaces/inventory/inventory';
-import { Participant } from '@interfaces/general/participant';
-import { ParticipantService } from '@services/General/participant.service';
+import { ParticipantService } from '@services/general/participant.service';
+import { InventoryProductService } from '@services/inventory/inventory-product.service';
+import { InventoryFileService } from '@services/inventory/inventory-file.service';
 
 @Component({
   templateUrl: './inventory-edit.component.html',
@@ -17,16 +18,20 @@ import { ParticipantService } from '@services/General/participant.service';
 
 export class InventoryEditComponent implements OnInit {
   public dataSourceFile: InventoryFile[];
-  public dataSourceProduct: InventoryProduct[];  
-  public resultsParticipant: Participant[];
+  public dataSourceProduct: InventoryProduct[];
+  public resultsParticipant = [];
   public formModel: FormGroup;
   public index = 0;
   public dados;
   public nomeBotao = '';
   public submitted = false;
   public salvando = false;
+  public inventoryFile;
+  public isInventoryFile;
 
   constructor(private service: InventoryService,
+    private serviceFile: InventoryFileService,
+    private serviceProd: InventoryProductService,
     private serviceParticipan: ParticipantService,
     private breadcrumbService: BreadcrumbService,
     private fb: FormBuilder,
@@ -45,9 +50,13 @@ export class InventoryEditComponent implements OnInit {
   ngOnInit() {
     this.nomeBotao = 'Salvar e continuar'
     this.createForm();
-    const id = Number.parseInt(this.router.paramsInheritanceStrategy.toString());
-    if (id > 0) {
-      this.edit(id);
+    const customData = window.history.state.customData;
+
+    if (customData) {
+      const id = Number.parseInt(customData.inventoryId);
+      if (id > 0) {
+        this.edit(id);
+      }
     }
   }
 
@@ -60,31 +69,57 @@ export class InventoryEditComponent implements OnInit {
       endDate: null,
       processed: new FormControl("0", Validators.required),
       cloused: new FormControl("0", Validators.required),
+      edit: false,
     });
+  }
+
+  enableField(enabled) {
+    if (enabled) {
+      this.formModel.controls['startDate'].enable();
+      this.formModel.controls['endDate'].enable();
+    } else {
+      this.formModel.controls['startDate'].disable();
+      this.formModel.controls['endDate'].disable();
+    }
   }
 
   async edit(id) {
     this.nomeBotao = 'Salvar';
     await this.service.getId(id).subscribe((result: Inventory) => {
+      this.resultsParticipant = [{ id: result.id, name: result.id + ' - ' + result.participant?.name + ' ( ' + result.participant?.document + ' ) ' }];
       this.formModel.reset({
         edit: true,
         id: result.id,
         name: result.name,
         startDate: new Date(formatDate(result.startDate, 'yyyy-MM-ddTHH:mm', 'en')),
-        endDate: new Date(formatDate(result.endDate, 'yyyy-MM-ddTHH:mm', 'en')),
-        participantId: { id: result.id, nome: result.id + ' - ' + result.participant.name + ' ( ' + result.participant.document + ' ) ' },
+        endDate: result.endDate.getDate > new Date("0001-01-01T00:00:00Z").getDate ? new Date(formatDate(result.endDate, 'yyyy-MM-ddTHH:mm', 'en')) : null,
+        participantId: { id: result.id, name: result.id + ' - ' + result.participant?.name + ' ( ' + result.participant?.document + ' ) ' },
         processed: result.processed,
         cloused: result.cloused,
       });
-      this.formModel.controls['startDate'].disable();
-      this.formModel.controls['endDate'].disable();
+      this.enableField(false);
+      this.LoadGrid(result.id);
+
+    });
+  }
+
+  LoadGrid(id) {
+    this.serviceFile.get(id).subscribe((result: InventoryFile[]) => {
+      this.dataSourceFile = result
+    });
+
+    this.serviceProd.get(id).subscribe((result: InventoryProduct[]) => {
+      this.dataSourceProduct = result
     });
   }
 
   async save() {
     this.submitted = true;
     if (this.formModel.valid && !this.salvando) {
-      const model = JSON.parse(JSON.stringify(this.formModel.value))
+      this.enableField(true);
+      const model = JSON.parse(JSON.stringify(this.formModel.value));
+      this.enableField(false);
+
       if (model.participantId)
         model.participantId = model.participantId.id;
 
@@ -93,7 +128,7 @@ export class InventoryEditComponent implements OnInit {
           model.edit = true;
           this.edit(result["id"]);
         } else {
-          this.router.navigate(['inventory']);
+          this.router.navigate(['/inventory/inventory']);
         }
         this.salvando = false;
       }, error => {
@@ -102,23 +137,36 @@ export class InventoryEditComponent implements OnInit {
         this.messageService.add({ key: '001', severity: 'info', summary: 'Falha ao save dados!', detail: msg });
       });
     }
-  } 
-  
+  }
+
   searchParticipant(event) {
     this.serviceParticipan.getAllSearch(0, event.query).subscribe(result => {
-      result.forEach(element => { element.id = element.id , element.name = element.id + ' - ' + element.name + ' ( ' + element.document + ' ) ' });
+      result.forEach(element => { element.id = element.id, element.name = element.id + ' - ' + element.name + ' ( ' + element.document + ' ) ' });
       this.resultsParticipant = result;
     });
   }
 
-  addParticipant(){
+  addParticipant() {
 
   }
 
-  AddFile(){
-
+  AddFile(id) {
+    this.inventoryFile = {
+      data: { inventoryId: this.formModel.value.id, id: null },
+      title: "Cadastro",
+      filtro: null
+    };
+    this.isInventoryFile = true;
   }
 
-  editFile(row){}
-  deleteFile(row){}
+  editFile(row) { 
+    this.AddFile(row.id)
+  }
+  
+  deleteFile(row) { }
+
+  closeInventoryFile() {
+    this.isInventoryFile = true;
+    this.LoadGrid(this.formModel.value.id);
+  }
 }

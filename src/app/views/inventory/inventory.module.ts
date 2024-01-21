@@ -37,10 +37,15 @@ import { InventoryComponent } from './inventory/inventory.component';
 import { InventoryRoutingModule } from './inventory-routing.module';
 import { SearchDynamicService } from './search-dynamic/search-dynamic.service';
 import { SearchDynamicComponent } from './search-dynamic/search-dynamic.component';
+import { ParticipantService } from '@services/general/participant.service';
+import { InventoryFileService } from '@services/inventory/inventory-file.service';
+import { InventoryProductService } from '@services/inventory/inventory-product.service';
+import { InventoryFileApp } from './inventory/inventory-file-app/inventory-file-app.component';
 
 const APP_COMPONENT = [
     InventoryComponent,
     InventoryEditComponent,
+    InventoryFileApp,
     SearchDynamicComponent,
 ];
 
@@ -73,9 +78,8 @@ const PRIMENG_MODULES = [
 ];
 
 @NgModule({
-    //schemas: [NO_ERRORS_SCHEMA],
     declarations: [
-        ...APP_COMPONENT
+        APP_COMPONENT
     ],
     imports: [
         FormsModule,
@@ -92,6 +96,9 @@ const PRIMENG_MODULES = [
         ConfirmationService,     
         InventoryService,
         SearchDynamicService,
+        ParticipantService,
+        InventoryFileService,
+        InventoryProductService,
     ]
 })
 export class InventoryModule {

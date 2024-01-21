@@ -8,10 +8,10 @@ import (
 
 /*0190*/
 type Unit struct {
-	Id          string `gorm:"primaryKey;size:6"`
-	TenantId    uint64
+	Id          string `gorm:"primaryKey;size:6" json:"id"`
+	TenantId    uint64 `json:"tenantId"`
 	Tenant      Tenant `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;" json:"-"`
-	Description string `gorm:"size:50"`
+	Description string `gorm:"size:50" json:"description"`
 }
 
 func (c *Unit) Validate() error {

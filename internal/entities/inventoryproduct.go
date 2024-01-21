@@ -9,25 +9,25 @@ import (
 
 /* H005 e H010 */
 type InventoryProduct struct {
-	InventoryId     uint64    `gorm:"primaryKey"`
+	InventoryId     uint64    `gorm:"primaryKey" json:"inventoryId"`
 	Inventory       Inventory `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;" json:"-"`
-	ProductId       uint64    `gorm:"primaryKey"`
-	Product         Product   `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;"`
-	OriginCode      string    `gorm:"size:60"`
-	Date            time.Time `gorm:"datetime"`
-	UnitId          string    `gorm:"size:6"`
+	ProductId       uint64    `gorm:"primaryKey" json:"productId"`
+	Product         Product   `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;" json:"product"`
+	OriginCode      string    `gorm:"size:60" json:"originCode"`
+	Date            time.Time `gorm:"datetime" json:"date"`
+	UnitId          string    `gorm:"size:6" json:"unitId"`
 	Unit            Unit      `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;" json:"-"`
-	Quantity        float64   `gorm:"type:decimal (18,3)"`
-	Value           float64   `gorm:"type:decimal (18,6)"`
-	ValueTotal      float64   `gorm:"type:decimal (18,2)"`
-	PossessionCode  string    `gorm:"size:1"`
-	ParticipantId   *uint64   `gorm:"default:null"`
-	Complement      string    `gorm:"size:250"`
-	AccountingCode  string    `gorm:"size:50"`
-	ValueIr         float64   `gorm:"type:decimal (12,2)"`
-	InputQuantity   float64   `gorm:"type:decimal (18,3)"`
-	OutputQuantity  float64   `gorm:"type:decimal (18,3)"`
-	BalanceQuantity float64   `gorm:"type:decimal (18,3)"`
+	Quantity        float64   `gorm:"type:decimal (18,3)" json:"quantity"`
+	Value           float64   `gorm:"type:decimal (18,6)" json:"value"`
+	ValueTotal      float64   `gorm:"type:decimal (18,2)" json:"valueTotal"`
+	PossessionCode  string    `gorm:"size:1" json:"possessionCode"`
+	ParticipantId   *uint64   `gorm:"default:null" json:"participantId"`
+	Complement      string    `gorm:"size:250" json:"complement"`
+	AccountingCode  string    `gorm:"size:50" json:"accountingCode"`
+	ValueIr         float64   `gorm:"type:decimal (12,2)" json:"valueIr"`
+	InputQuantity   float64   `gorm:"type:decimal (18,3)" json:"inputQuantity"`
+	OutputQuantity  float64   `gorm:"type:decimal (18,3)" json:"outputQuantity"`
+	BalanceQuantity float64   `gorm:"type:decimal (18,3)" json:"balanceQuantity"`
 }
 
 func (c *InventoryProduct) Validate() error {

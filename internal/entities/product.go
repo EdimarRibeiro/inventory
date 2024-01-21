@@ -8,22 +8,22 @@ import (
 
 /*0200*/
 type Product struct {
-	Id            uint64 `gorm:"primaryKey;autoIncrement:true"`
-	TenantId      uint64
+	Id            uint64  `gorm:"primaryKey;autoIncrement:true" json:"id"`
+	TenantId      uint64  `json:"tenantId"`
 	Tenant        Tenant  `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;" json:"-"`
-	OriginCode    string  `gorm:"size:60"`
-	Description   string  `gorm:"size:250"`
-	BarCode       string  `gorm:"size:60"`
-	OldOriginCode string  `gorm:"size:60"`
-	UnitId        string  `gorm:"size:6"`
+	OriginCode    string  `gorm:"size:60" json:"originCode"`
+	Description   string  `gorm:"size:250" json:"description"`
+	BarCode       string  `gorm:"size:60" json:"barCode"`
+	OldOriginCode string  `gorm:"size:60" json:"oldOriginCode"`
+	UnitId        string  `gorm:"size:6" json:"unitId"`
 	Unit          Unit    `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;" json:"-"`
-	Type          string  `gorm:"size:2"`
-	NcmCode       string  `gorm:"size:8"`
-	ExIpi         string  `gorm:"size:3"`
-	GenderCode    string  `gorm:"size:2"`
-	ServiceCode   string  `gorm:"size:5"`
-	AliqIcms      float64 `gorm:"type:decimal (8,2)"`
-	CestCode      string  `gorm:"size:7"`
+	Type          string  `gorm:"size:2" json:"type"`
+	NcmCode       string  `gorm:"size:8" json:"ncmCode"`
+	ExIpi         string  `gorm:"size:3" json:"exIpi"`
+	GenderCode    string  `gorm:"size:2" json:"genderCode"`
+	ServiceCode   string  `gorm:"size:5" json:"serviceCode"`
+	AliqIcms      float64 `gorm:"type:decimal (8,2)" json:"aliqIcms"`
+	CestCode      string  `gorm:"size:7" json:"cestCode"`
 }
 
 func (c *Product) Validate() error {

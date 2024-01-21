@@ -13,7 +13,7 @@
                 </div>
             </div>
             <div class="p-field p-grid">
-                <label class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Empresa</label>
+                <label class="p-col-12 p-mb-2 p-md-1 p-mb-md-0">Empresa</label>
                 <div class="p-col-12 p-md-10">
                     <p-autoComplete formControlName="participantId" [suggestions]="resultsParticipant"
                         (completeMethod)="searchParticipant($event)" field="name" [forceSelection]="true"
@@ -82,8 +82,8 @@
                     </div>
                     <div style="padding-top: 23px">
                         <div style="column-count: 1">
-                            <button pButton type="button" label="Novo Arquivo" icon="pi pi-check"
-                                (click)="AddFile()"></button>
+                            <button pButton type="button" label="Novo" icon="pi pi-check"
+                                (click)="AddFile(null)"></button>
                         </div>
                     </div>
                 </div>
@@ -130,41 +130,44 @@
                         <div style="column-count: 1">
                         </div>
                     </div>
-                    <p-table [value]="dataSourceProduct" responsiveLayout="stack" [resizableColumns]="true">
-                        <ng-template pTemplate="header">
-                            <tr>
-                                <th>Código</th>
-                                <th>Nome</th>
-                                <th>Situação</th>
-                                <th width="96vh"></th>
-                            </tr>
-                        </ng-template>
-                        <ng-template pTemplate="body" let-row let-i="rowIndex">
-                            <tr>
-                                <td width="10%">
-                                    <span class="p-column-title">Código</span> {{ row.productId }}
-                                </td>
-                                <td width="30%">
-                                    <span class="p-column-title">Nome</span> {{ row.product?.name }}
-                                </td>
-                                <td width="15%">
-                                    <span class="p-column-title">Saldo Inicial</span> {{ row.quantity | currency: " ":"symbol":"1.3"}}
-                                </td>
-                                <td width="15%">
-                                    <span class="p-column-title">Entrada</span> {{ row.inputQuantity | currency: " ":"symbol":"1.3"}}
-                                </td>
-                                <td width="15%">
-                                    <span class="p-column-title">Saída</span> {{ row.outputQuantity | currency: " ":"symbol":"1.3"}}
-                                </td>
-                                <td width="15%">
-                                    <span class="p-column-title">Saldo</span> {{ row.balanceQuantity | currency: " ":"symbol":"1.3"}}
-                                </td>
-                                <td width="96vh">
-                                </td>
-                            </tr>
-                        </ng-template>
-                    </p-table>
                 </div>
+                <p-table [value]="dataSourceProduct" responsiveLayout="stack" [resizableColumns]="true">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Código</th>
+                            <th>Produto</th>
+                            <th>Saldo Inicial</th>
+                            <th>Entrada</th>
+                            <th>Saída</th>
+                            <th>Saldo</th>
+                            <th width="96vh"></th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-row let-i="rowIndex">
+                        <tr>
+                            <td width="10%">
+                                <span class="p-column-title">Código</span> {{ row.productId }}
+                            </td>
+                            <td width="20%">
+                                <span class="p-column-title">Produto</span> {{ row.product?.name }}
+                            </td>
+                            <td width="15%">
+                                <span class="p-column-title">Saldo Inicial</span> {{ row.quantity | currency: "":"symbol":"1.3"}}
+                            </td>
+                            <td width="15%">
+                                <span class="p-column-title">Entrada</span> {{ row.inputQuantity | currency: "":"symbol":"1.3"}}
+                            </td>
+                            <td width="15%">
+                                <span class="p-column-title">Saída</span> {{ row.outputQuantity | currency: "":"symbol":"1.3"}}
+                            </td>
+                            <td width="15%">
+                                <span class="p-column-title">Saldo</span> {{ row.balanceQuantity | currency: "":"symbol":"1.3"}}
+                            </td>
+                            <td width="96vh">
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
             </p-tabPanel>
         </p-tabView>
     </form>
@@ -173,3 +176,6 @@
 <p-confirmDialog acceptLabel="Sim" rejectLabel="Não" header="Confirmation" [style]="{width: '50vw'}" [autoZIndex]="true"
     rejectButtonStyleClass="p-button-text"></p-confirmDialog>
 <p-toast key="001"></p-toast>
+
+<app-inventory-file *ngIf="isInventoryFile" [show]="isInventoryFile" [data]="inventoryFile"
+    (showChange)="closeInventoryFile()"></app-inventory-file>
