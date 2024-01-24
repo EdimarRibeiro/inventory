@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '@environments';
 import { Observable } from 'rxjs';
 import { InventoryFile } from '@interfaces/inventory/inventory-file';
@@ -19,7 +19,7 @@ export class InventoryFileService {
   }
 
   getAllSearch(inventoryId: number, page: number, search: string): Observable<InventoryFile[]> {
-    return this.http.get<InventoryFile[]>(`${this.URLs}/${inventoryId}/?page=${page}&&search=${search}`);
+    return this.http.get<InventoryFile[]>(`${this.URLs}/${inventoryId}/?page=${page}&search=${search}`);
   }
 
   getId(inventoryId, id): Observable<InventoryFile> {
@@ -28,17 +28,23 @@ export class InventoryFileService {
 
   save(inventoryFile) {
     if (inventoryFile.edit) {
-      return this.http.put(this.URL + '/' + inventoryFile.id, inventoryFile);
+      return this.http.put(this.URL + '/' + inventoryFile.inventoryId+ '/' + inventoryFile.id, inventoryFile);
     } else {
       return this.http.post(this.URL, inventoryFile);
     }
   }
 
   delete(inventoryFile) {
-    return this.http.delete(this.URL + '/' + inventoryFile.id, inventoryFile);
+    return this.http.delete(this.URL + '/' + inventoryFile.inventoryId+ '/' + inventoryFile.id, inventoryFile);
   }
 
-  setFileOcean(file){
-    return this.http.post(this.URLUp, file);
+  setFileOcean(file) {
+    const headers = new HttpHeaders({
+      'content-type': 'multipart/form-data',
+      'x-file-name': file.name,
+    });
+    const formData: FormData = new FormData();
+    formData.append('file', file, file.name);
+    return this.http.post(this.URLUp, formData, {headers});
   }
 }

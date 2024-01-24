@@ -36,7 +36,7 @@ export interface Document {
 	ValuePisSt    :number
 	ValueCofinsSt :number
 	Origined      :string
-	Processed     :number
-	Imported      :number
-	Cloused       :number
+	Processed     :boolean
+	Imported      :boolean
+	Cloused       :boolean
 }

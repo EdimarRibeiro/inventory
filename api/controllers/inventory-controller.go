@@ -88,7 +88,7 @@ func (repo *inventoryController) GetById(tenantId uint64, id uint64) (*entities.
 	return &inventorys[0], nil
 }
 
-func (repo *inventoryController) Update(tenantId uint64, id uint64, inventory *entities.Inventory) error {
+func (repo *inventoryController) update(tenantId uint64, id uint64, inventory *entities.Inventory) error {
 	inventorys, err := repo.inventory.Search("Inventory.TenantId=" + strconv.FormatUint(tenantId, 10) + " and Inventory.Id=" + strconv.FormatUint(id, 10))
 	if len(inventorys) == 0 || err != nil {
 		return err
@@ -103,7 +103,12 @@ func (repo *inventoryController) Update(tenantId uint64, id uint64, inventory *e
 	return err
 }
 
-func (repo *inventoryController) Delete(tenantId uint64, id uint64) error {
+func (repo *inventoryController) save(inventory *entities.Inventory) error {
+	_, err := repo.inventory.Save(inventory)
+	return err
+}
+
+func (repo *inventoryController) delete(tenantId uint64, id uint64) error {
 	inventorys, err := repo.inventory.Search("Inventory.TenantId=" + strconv.FormatUint(tenantId, 10) + " and Inventory.Id=" + strconv.FormatUint(id, 10))
 	if len(inventorys) == 0 || err != nil {
 		return err
@@ -159,6 +164,31 @@ func (repo *inventoryController) GetByIdlHandler(w http.ResponseWriter, r *http.
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(inventory)
 }
+
+func (repo *inventoryController) CreateHandler(w http.ResponseWriter, r *http.Request) {
+	_, tenantId, err := common.ValidateToken(r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+
+	var createInventory entities.Inventory
+	if err := json.NewDecoder(r.Body).Decode(&createInventory); err != nil {
+		http.Error(w, "Error decoding JSON "+err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	createInventory.Id = 0
+	createInventory.TenantId = tenantId
+
+	if err := repo.save(&createInventory); err != nil {
+		http.Error(w, "Error create inventory "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+}
+
 func (repo *inventoryController) UpdateHandler(w http.ResponseWriter, r *http.Request) {
 	_, tenantId, err := common.ValidateToken(r)
 	if err != nil {
@@ -190,7 +220,7 @@ func (repo *inventoryController) UpdateHandler(w http.ResponseWriter, r *http.Re
 		return
 	}
 
-	if err := repo.Update(tenantId, inventoryId, &updatedInventory); err != nil {
+	if err := repo.update(tenantId, inventoryId, &updatedInventory); err != nil {
 		http.Error(w, "Error updating inventory "+err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -220,7 +250,7 @@ func (repo *inventoryController) DeleteHandler(w http.ResponseWriter, r *http.Re
 		http.Error(w, "Not Found inventory id ", http.StatusNotFound)
 		return
 	}
-	if err := repo.Delete(tenantId, inventoryId); err != nil {
+	if err := repo.delete(tenantId, inventoryId); err != nil {
 		http.Error(w, "Error deleting inventory "+err.Error(), http.StatusInternalServerError)
 		return
 	}

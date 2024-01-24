@@ -33,11 +33,10 @@ func ValidateToken(r *http.Request) (string, uint64, error) {
 
 	return claims.Username, claims.ExternalId, nil
 }
-
 func ExtractSearch(r *http.Request) (string, int64, int64) {
 	search := strings.ReplaceAll(r.FormValue("search"), "undefined", "")
 	page, err := strconv.ParseInt(r.FormValue("page"), 10, 64)
-	if err != nil {
+	if err != nil || page == 0 {
 		page = 1
 	}
 	rows, err := strconv.ParseInt(r.FormValue("rows"), 10, 64)
@@ -49,6 +48,9 @@ func ExtractSearch(r *http.Request) (string, int64, int64) {
 
 func PageResult[T any](dataSet []T, page int64, rows int64) *models.ResponsePage {
 
+	if page == 0 {
+		page = 1
+	}
 	totalRecords := int64(len(dataSet))
 	pages := int64(math.Ceil(float64(totalRecords) / float64(rows)))
 

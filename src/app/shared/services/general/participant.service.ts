@@ -20,7 +20,7 @@ export class ParticipantService {
   }
 
   getAllSearch(page: number, search: string): Observable<Participant[]> {
-    return this.http.get<Participant[]>(`${this.URL}?page=${page}&&search=${search}`);
+    return this.http.get<Participant[]>(`${this.URL}s?page=${page}&search=${search}`);
   }
 
   save(participant: any) {

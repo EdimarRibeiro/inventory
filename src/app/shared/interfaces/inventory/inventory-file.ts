@@ -5,7 +5,7 @@ export interface InventoryFile {
     inventoryId: number;
     fileName: string;
     fileType: string;   
-    processed: number;    
+    processed: boolean;    
     inventory?: Inventory;
 }
  

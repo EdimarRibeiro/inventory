@@ -65,12 +65,12 @@
           font-size: 12px;
           letter-spacing: .3px;
 
-          &.processed-1 {
+          &.processed-true {
             background: #C8E6C9;
             color: #256029;
           }
 
-          &.processed-0 {
+          &.processed-false {
             background: #FFCDD2;
             color: #C63737;
           }

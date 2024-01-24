@@ -7,8 +7,8 @@ export interface Inventory {
     participantId: number;    
     startDate: Date;
     endDate?: Date;
-    processed: number;
-    cloused: number;
+    processed: boolean;
+    cloused: boolean;
     participant: Participant;
 }
  

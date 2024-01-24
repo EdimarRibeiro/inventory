@@ -8,7 +8,7 @@
         <label class="p-col-12 p-mb-2 p-md-1 p-mb-md-0">Arquivo</label>
         <div class="p-col-12 p-md-9">
           <p-fileUpload chooseLabel="Abrir" uploadLabel="Carregar" cancelLabel="Excluir" name="fileName"
-            customUpload="true" (onClear)="onClear()" (uploadHandler)="onUpload($event)">
+            customUpload="true" (onClear)="onClear()" (uploadHandler)="onUpload($event)" [multiple]="false">
           </p-fileUpload>
 
           <small class="p-invalid" *ngIf="submitted && !formModel.controls['fileName'].valid">Este campo é
@@ -27,9 +27,9 @@
       <div class="p-field p-grid">
         <label class="p-col-12 p-mb-2 p-md-1 p-mb-md-0">Processado?</label>
         <div class="p-col-12 p-md-10">
-          <p-radioButton formControlName="processed" name="processed" value="A" label="Sim"
+          <p-radioButton formControlName="processed" name="processed" [value]=true label="Sim"
             inputId="processedSim"></p-radioButton>
-          <p-radioButton formControlName="processed" [style]="{'margin-left': '30px'}" name="processed" value="I"
+          <p-radioButton formControlName="processed" [style]="{'margin-left': '30px'}" name="processed" [value]=false
             label="Não" inputId="processedNao"></p-radioButton>
           <br>
           <small class="p-invalid" *ngIf="submitted && !formModel.controls['processed'].valid">Este campo é
@@ -37,7 +37,10 @@
         </div>
       </div>
       <div class="p-fluid p-formgrid p-grid">
-        <div class="p-field p-col-12 p-md-3"></div>
+        <div class="p-field p-col-12 p-md-3">
+          <button style="float: right;" pButton type="button" label="Carregar Pasta" (click)="fileAllFolder()"
+            icon="pi pi-spin"></button>
+        </div>
         <div class="p-field p-col-12 p-md-6">
           <p-button *ngIf="!salvando" (click)="save()" icon="pi pi-save" iconPos="right" label="Salvar e Continuar"
             styleClass="p-button-rounded"></p-button>
@@ -45,6 +48,23 @@
             styleClass="p-button-rounded"></p-button>
         </div>
       </div>
+    </div>
+
+    <div *ngIf="this.allFilesFolder" class="p-fluid p-formgrid p-grid">
+      <div class="p-field p-col-12">
+        <h4 style="text-align: center;font-family: auto;">Carregar vários arquivos</h4>
+      </div>
+      <div class="p-field p-col-12">
+        <p-fileUpload customUpload="true" (uploadHandler)="onUploadAll($event)" [multiple]="true" maxFileSize="1000000" chooseLabel="Abrir"
+          uploadLabel="Carregar">
+          <ng-template pTemplate="content">
+            <ul *ngIf="uploadedFiles.length">
+              <li *ngFor="let file of uploadedFiles">{{ file.name }} - {{ file.size }} bytes</li>
+            </ul>
+          </ng-template>
+        </p-fileUpload>
+      </div>
+      <button pButton type="button" label="Concluir" (click)="back()" icon="pi pi-save"></button>
     </div>
   </form>
 </p-dialog>

@@ -4,5 +4,5 @@ export interface Tenant {
     document: string;
     startDate: Date;
     personId: number;
-    canceled: number;
+    canceled: boolean;
 }

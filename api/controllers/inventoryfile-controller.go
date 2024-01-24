@@ -35,7 +35,13 @@ func (repo *inventoryfileController) GetById(inventoryId uint64, id uint64) (*en
 	return &inventoryfiles[0], nil
 }
 
-func (repo *inventoryfileController) Update(inventoryId uint64, id uint64, inventoryfile *entities.InventoryFile) error {
+func (repo *inventoryfileController) save(inventoryfile *entities.InventoryFile) error {
+
+	_, err := repo.inventoryfile.Save(inventoryfile)
+	return err
+}
+
+func (repo *inventoryfileController) update(inventoryId uint64, id uint64, inventoryfile *entities.InventoryFile) error {
 	inventoryfiles, err := repo.inventoryfile.Search("InventoryFile.InventoryId=" + strconv.FormatUint(inventoryId, 10) + " and InventoryFile.Id=" + strconv.FormatUint(id, 10))
 	if len(inventoryfiles) == 0 || err != nil {
 		return err
@@ -53,7 +59,7 @@ func (repo *inventoryfileController) Update(inventoryId uint64, id uint64, inven
 	return err
 }
 
-func (repo *inventoryfileController) Delete(inventoryId uint64, id uint64) error {
+func (repo *inventoryfileController) delete(inventoryId uint64, id uint64) error {
 	inventoryfiles, err := repo.inventoryfile.Search("InventoryFile.InventoryId=" + strconv.FormatUint(inventoryId, 10) + " and InventoryFile.Id=" + strconv.FormatUint(id, 10))
 	if len(inventoryfiles) == 0 || err != nil {
 		return err
@@ -122,6 +128,26 @@ func (repo *inventoryfileController) GetByIdlHandler(w http.ResponseWriter, r *h
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(inventoryfile)
 }
+func (repo *inventoryfileController) CreateHandler(w http.ResponseWriter, r *http.Request) {
+	_, _, err := common.ValidateToken(r)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusUnauthorized)
+		return
+	}
+
+	var model entities.InventoryFile
+	if err := json.NewDecoder(r.Body).Decode(&model); err != nil {
+		http.Error(w, "Error decoding JSON "+err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	if err := repo.save(&model); err != nil {
+		http.Error(w, "Error create inventoryfile "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+}
 func (repo *inventoryfileController) UpdateHandler(w http.ResponseWriter, r *http.Request) {
 	_, _, err := common.ValidateToken(r)
 	if err != nil {
@@ -164,7 +190,7 @@ func (repo *inventoryfileController) UpdateHandler(w http.ResponseWriter, r *htt
 		return
 	}
 
-	if err := repo.Update(inventoryId, id, &updatedInventoryFile); err != nil {
+	if err := repo.update(inventoryId, id, &updatedInventoryFile); err != nil {
 		http.Error(w, "Error updating inventoryfile "+err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -203,7 +229,7 @@ func (repo *inventoryfileController) DeleteHandler(w http.ResponseWriter, r *htt
 		return
 	}
 
-	if err := repo.Delete(inventoryId, id); err != nil {
+	if err := repo.delete(inventoryId, id); err != nil {
 		http.Error(w, "Error deleting inventoryfile "+err.Error(), http.StatusInternalServerError)
 		return
 	}

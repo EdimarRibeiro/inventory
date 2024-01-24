@@ -21,7 +21,7 @@ export class UserService {
     }
 
     getAllGrid(page: number, search: string): Observable<User[]> {
-        return this.http.get<User[]>(`${this.URL}/grid/?pagina=${page}&&pesquisa=${search}`);
+        return this.http.get<User[]>(`${this.URL}?page=${page}&search=${search}`);
     }
     
     salvar(user) {

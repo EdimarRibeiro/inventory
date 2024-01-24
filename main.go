@@ -13,10 +13,12 @@ import (
 
 func corsMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		// Adicionar logs para depuração
 		w.Header().Set("Access-Control-Allow-Origin", "*")
-		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, OPTIONS")
-		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+		w.Header().Set("Access-Control-Allow-Methods", "GET,POST,OPTIONS,DELETE,PUT")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization, X-File-Name")
+		w.Header().Set("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0")
+		w.Header().Set("Pragma", "no-cache")
+		w.Header().Set("Expires", "0")
 
 		if r.Method == "OPTIONS" {
 			w.WriteHeader(http.StatusOK)
@@ -24,6 +26,8 @@ func corsMiddleware(next http.Handler) http.Handler {
 		}
 
 		next.ServeHTTP(w, r)
+
+		//	http.Error(w, "Origem não permitida", http.StatusForbidden)
 	})
 }
 
@@ -37,6 +41,7 @@ func main() {
 	tenRepo := database.CreateTenantRepository(database.DB)
 	cityRepo := database.CreateCityRepository(database.DB)
 	personRepo := database.CreatePersonRepository(database.DB)
+	participantRepo := database.CreateParticipantRepository(database.DB)
 	userRepo := database.CreateUserRepository(database.DB)
 	inventoryRepo := database.CreateInventoryRepository(database.DB)
 	inventoryFileRepo := database.CreateInventoryFileRepository(database.DB)
@@ -50,6 +55,7 @@ func main() {
 
 	user := controllers.CreateUserController(userRepo)
 	city := controllers.CreateCityController(cityRepo)
+	participant := controllers.CreateParticipantController(participantRepo)
 	inventory := controllers.CreateInventoryController(inventoryRepo)
 	inventoryFile := controllers.CreateInventoryFileController(inventoryFileRepo)
 	inventoryProduct := controllers.CreateInventoryProductController(inventoryProductRepo)
@@ -111,6 +117,26 @@ func main() {
 	router.HandleFunc("/api/user/{id}", user.DeleteHandler).Methods("OPTIONS")
 	router.HandleFunc("/api/user/{id}", user.DeleteHandler).Methods("DELETE")
 
+	// Private route to get all participant (requires JWT)
+	router.HandleFunc("/api/participants", participant.GetAllHandler).Methods("OPTIONS")
+	router.HandleFunc("/api/participants", participant.GetAllHandler).Methods("GET")
+
+	// Private route to get a specific inventory by ID (requires JWT)
+	router.HandleFunc("/api/participant/{id}", participant.GetByIdlHandler).Methods("OPTIONS")
+	router.HandleFunc("/api/participant/{id}", participant.GetByIdlHandler).Methods("GET")
+
+	// Private route to create a participant by ID (requires JWT)
+	router.HandleFunc("/api/participant", participant.CreateHandler).Methods("OPTIONS")
+	router.HandleFunc("/api/participant", participant.CreateHandler).Methods("POST")
+
+	// Private route to update a participant by ID (requires JWT)
+	router.HandleFunc("/api/participant/{id}", participant.UpdateHandler).Methods("OPTIONS")
+	router.HandleFunc("/api/participant/{id}", participant.UpdateHandler).Methods("PUT")
+
+	// Private route to delete a participant by ID (requires JWT)
+	router.HandleFunc("/api/participant/{id}", participant.DeleteHandler).Methods("OPTIONS")
+	router.HandleFunc("/api/participant/{id}", participant.DeleteHandler).Methods("DELETE")
+
 	// Private route to get all inventories (requires JWT)
 	router.HandleFunc("/api/inventories", inventory.GetAllHandler).Methods("OPTIONS")
 	router.HandleFunc("/api/inventories", inventory.GetAllHandler).Methods("GET")
@@ -127,6 +153,10 @@ func main() {
 	router.HandleFunc("/api/inventory/{id}", inventory.GetByIdlHandler).Methods("OPTIONS")
 	router.HandleFunc("/api/inventory/{id}", inventory.GetByIdlHandler).Methods("GET")
 
+	// Private route to create a inventory by ID (requires JWT)
+	router.HandleFunc("/api/inventory", inventory.CreateHandler).Methods("OPTIONS")
+	router.HandleFunc("/api/inventory", inventory.CreateHandler).Methods("POST")
+
 	// Private route to update a inventory by ID (requires JWT)
 	router.HandleFunc("/api/inventory/{id}", inventory.UpdateHandler).Methods("OPTIONS")
 	router.HandleFunc("/api/inventory/{id}", inventory.UpdateHandler).Methods("PUT")
@@ -142,6 +172,10 @@ func main() {
 	// Private route to get a specific inventoryfile by ID (requires JWT)
 	router.HandleFunc("/api/inventoryfile/{inventoryId}/{id}", inventoryFile.GetByIdlHandler).Methods("OPTIONS")
 	router.HandleFunc("/api/inventoryfile/{inventoryId}/{id}", inventoryFile.GetByIdlHandler).Methods("GET")
+
+	// Private route to create a inventoryfile by ID (requires JWT)
+	router.HandleFunc("/api/inventoryfile", inventoryFile.CreateHandler).Methods("OPTIONS")
+	router.HandleFunc("/api/inventoryfile", inventoryFile.CreateHandler).Methods("POST")
 
 	// Private route to update a inventoryfile by ID (requires JWT)
 	router.HandleFunc("/api/inventoryfile/{inventoryId}/{id}", inventoryFile.UpdateHandler).Methods("OPTIONS")

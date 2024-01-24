@@ -21,7 +21,7 @@ export class InventoryProductService {
     }
 
     getAllSearch(inventoryId: number, page: number, search: string): Observable<InventoryProduct[]> {
-        return this.http.get<InventoryProduct[]>(`${this.URLs}/${inventoryId}/?page=${page}&&search=${search}`);
+        return this.http.get<InventoryProduct[]>(`${this.URLs}/${inventoryId}?page=${page}&search=${search}`);
     }
 
     save(inventoryProduct: any) {

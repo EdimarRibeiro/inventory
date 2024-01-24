@@ -67,8 +67,8 @@ export class InventoryEditComponent implements OnInit {
       participantId: new FormControl('', Validators.required),
       startDate: null,
       endDate: null,
-      processed: new FormControl("0", Validators.required),
-      cloused: new FormControl("0", Validators.required),
+      processed: new FormControl(false, Validators.required),
+      cloused: new FormControl(false, Validators.required),
       edit: false,
     });
   }
@@ -140,9 +140,10 @@ export class InventoryEditComponent implements OnInit {
   }
 
   searchParticipant(event) {
-    this.serviceParticipan.getAllSearch(0, event.query).subscribe(result => {
-      result.forEach(element => { element.id = element.id, element.name = element.id + ' - ' + element.name + ' ( ' + element.document + ' ) ' });
-      this.resultsParticipant = result;
+    const search = `(lower(name) like '%25${event.query}%25' or lower(document) like '%25${event.query}%25')`; 
+    this.serviceParticipan.getAllSearch(0, search).subscribe(result => {
+      result["records"].forEach(element => { element.id = element.id, element.name = element.id + ' - ' + element.name + ' ( ' + element.document + ' ) ' });
+      this.resultsParticipant = result["records"];
     });
   }
 
@@ -152,21 +153,46 @@ export class InventoryEditComponent implements OnInit {
 
   AddFile(id) {
     this.inventoryFile = {
-      data: { inventoryId: this.formModel.value.id, id: null },
+      data: { inventoryId: this.formModel.value.id, id: id },
       title: "Cadastro",
       filtro: null
     };
     this.isInventoryFile = true;
   }
 
-  editFile(row) { 
+  editFile(row) {
     this.AddFile(row.id)
   }
-  
-  deleteFile(row) { }
+
+  deleteFile(row) {
+    this.confirmationService.confirm({
+      header: "Deseja realmente delete ?",
+      message: row.fileName,
+      icon: "pi pi-info-circle",
+
+      accept: () => {
+        this.serviceFile.delete(row).subscribe(() => {
+          this.messageService.add({ key: "001", severity: "success", summary: "Excluido!", detail: row.fileName });
+          this.LoadGrid(row.inventoryId);
+        },
+          (err) => {
+            this.messageService.add({ key: "001", life: 5000, severity: "error", summary: "Não foi possivel Excluir!", detail: "Verifique se os itens dessa tabela já foram excluídos " + err.status, });
+          }
+        );
+      },
+      reject: () => {
+        this.messageService.add({
+          key: "001",
+          severity: "error",
+          summary: "Exclusão Cancelada!",
+          detail: "",
+        });
+      },
+    });
+  }
 
   closeInventoryFile() {
-    this.isInventoryFile = true;
+    this.isInventoryFile = false;
     this.LoadGrid(this.formModel.value.id);
   }
 }

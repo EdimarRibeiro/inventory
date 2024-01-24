@@ -43,10 +43,10 @@
             <div class="p-field p-grid">
                 <label class="p-col-12 p-mb-2 p-md-2 p-mb-md-0">Processado</label>
                 <div class="p-col-12 p-md-10">
-                    <p-radioButton formControlName="processed" name="processed" value="1" label="Sim"
+                    <p-radioButton formControlName="processed" name="processed" [value]=true label="Sim"
                         inputId="processedSim"></p-radioButton>
                     <p-radioButton formControlName="processed" [style]="{'margin-left': '30px'}" name="processed"
-                        value="0" label="Não" inputId="processedNao"></p-radioButton>
+                        [value]=false label="Não" inputId="processedNao"></p-radioButton>
                     <br>
                     <small class="p-invalid" *ngIf="submitted && !formModel.controls['processed'].valid">Este campo é
                         obrigatório.</small>
@@ -87,35 +87,34 @@
                         </div>
                     </div>
                 </div>
-                <p-table [value]="dataSourceFile" responsiveLayout="stack" [resizableColumns]="true">
+                <p-table [value]="dataSourceFile" [rowHover]="true" dataKey="id" responsiveLayout="stack"
+                    [resizableColumns]="true">
                     <ng-template pTemplate="header">
                         <tr>
-                            <th>Arquivo</th>
-                            <th>Tipo</th>
-                            <th>Situação</th>
+                            <th style="width:40%">Arquivo</th>
+                            <th style="width:25%">Tipo</th>
+                            <th style="width:25%">Processado</th>
                             <th width="96vh"></th>
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="body" let-row let-i="rowIndex">
                         <tr>
-                            <td width="50%">
-                                <span class="p-column-title">Arquivo</span>
-                                {{ row.fileName }}
+                            <td style="width:40%">
+                                <span class="p-column-title">Arquivo:</span> {{ row.fileName }}
                             </td>
-                            <td width="20%">
-                                <span class="p-column-title">Tipo</span>
-                                {{ row.fileType }}
+                            <td style="width:25%">
+                                <span class="p-column-title">Tipo:</span> {{ row.fileType }}
                             </td>
-                            <td width="35%">
-                                <span class="p-column-title">Processado</span>
-                                <span [class]="'customer-badge processed-' + row.processed">
-                                    {{row.processed === 1 ? 'Sim' : 'Não'}}
-                                </span>
+                            <td style="width:25%">
+                                <span class="p-column-title">Processado:</span> <span
+                                    [class]="'customer-badge processed-' + row.processed"> {{row.processed ? 'Sim' :
+                                    'Não'}} </span>
                             </td>
                             <td width="96vh">
-                                <button pButton type="button" icon="pi pi-pencil" (click)="editFile(row)"></button>
-                                <button pButton type="button" icon="pi pi-trash" class="p-button-danger"
-                                    (click)="deleteFile(row)" style="float: right"></button>
+                                <button pButton type="button" icon="pi pi-pencil" (click)="editFile(row)"
+                                    style="margin-right: 3px"></button>
+                                <button pButton type="button" icon="pi pi-trash" (click)="deleteFile(row)"
+                                    class="p-button-danger"></button>
                             </td>
                         </tr>
                     </ng-template>
@@ -152,16 +151,20 @@
                                 <span class="p-column-title">Produto</span> {{ row.product?.name }}
                             </td>
                             <td width="15%">
-                                <span class="p-column-title">Saldo Inicial</span> {{ row.quantity | currency: "":"symbol":"1.3"}}
+                                <span class="p-column-title">Saldo Inicial</span> {{ row.quantity | currency:
+                                "":"symbol":"1.3"}}
                             </td>
                             <td width="15%">
-                                <span class="p-column-title">Entrada</span> {{ row.inputQuantity | currency: "":"symbol":"1.3"}}
+                                <span class="p-column-title">Entrada</span> {{ row.inputQuantity | currency:
+                                "":"symbol":"1.3"}}
                             </td>
                             <td width="15%">
-                                <span class="p-column-title">Saída</span> {{ row.outputQuantity | currency: "":"symbol":"1.3"}}
+                                <span class="p-column-title">Saída</span> {{ row.outputQuantity | currency:
+                                "":"symbol":"1.3"}}
                             </td>
                             <td width="15%">
-                                <span class="p-column-title">Saldo</span> {{ row.balanceQuantity | currency: "":"symbol":"1.3"}}
+                                <span class="p-column-title">Saldo</span> {{ row.balanceQuantity | currency:
+                                "":"symbol":"1.3"}}
                             </td>
                             <td width="96vh">
                             </td>
